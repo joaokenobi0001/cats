@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { VictoryBar, VictoryChart, VictoryPie } from 'victory';
-import './userStatsGraphs.css'; // Importa o CSS
+import './style.css'; // Importa o CSS
 
 function UserStatsGraphs({ data }) {
   const [graph, setGraph] = useState([]);
