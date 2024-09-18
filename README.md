@@ -2,7 +2,6 @@
 
 Bem-vindo ao projeto de rede social para gatos! Este guia fornece uma visão geral do desenvolvimento e estrutura do projeto.
 
-## Roadmap do Projeto
 
 ### 1. Planejamento
 
