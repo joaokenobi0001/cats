@@ -5,6 +5,7 @@
     gap: 1rem; /* Espaçamento entre os itens */
     margin-bottom: 1rem; /* Espaço na parte inferior */
     justify-items: center; /* Centraliza os itens horizontalmente */
+    scroll-behavior: smooth; /* Rolagem suave */
   }
   
   @media (max-width: 40rem) {

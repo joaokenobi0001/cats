@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { fetchCatImages } from '../../api/api'; // Importando a função
 import ErrorMsg from '../../Components/ErrorMsg';
 import FeedPhotosItem from '../../Components/FeedPhotosItem';
@@ -29,16 +29,16 @@ function FeedPhotos({ setModalPhoto, setInfinite }) {
     fetchPhotos();
   }, [page, request]);
 
-  useEffect(() => {
-    function handleScroll() {
-      if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.scrollHeight - 200 && hasMore && !loading) {
-        setPage((prevPage) => prevPage + 1);
-      }
+  const handleScroll = useCallback(() => {
+    if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.scrollHeight - 200 && hasMore && !loading) {
+      setPage((prevPage) => prevPage + 1);
     }
+  }, [hasMore, loading]);
 
+  useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [hasMore, loading]);
+  }, [handleScroll]);
 
   if (error) return <ErrorMsg error={error} />;
   if (loading && page === 1) return <Loading />;

@@ -32,3 +32,15 @@
   position: relative;
   top: -1px;
 }
+
+span{
+  color:pink;
+
+}
+
+.logo{
+  text-align: none;
+  text-decoration: none;
+  color:black;
+  font-family: "Roboto", sans-serif;
+}

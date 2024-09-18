@@ -7,7 +7,7 @@ function Header({ user }) {
     <header className="StyledHeader">
       <nav className="container">
         <Link className="logo" to="/" aria-label="Dogs - Home">
-          Cats <span style={{color: "pink", fontSize: '50px'}}>.</span>
+          Cats <span>.</span>
         </Link>
         {user ? (
           <Link className="login-header" to="/conta">
