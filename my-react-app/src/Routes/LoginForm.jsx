@@ -67,9 +67,9 @@ function LoginForm() {
         <div className='cadastro'>
           <Title type='h2'>Cadastre-se</Title>
           <p>Ainda não possui conta? Cadastre-se no site.</p>
-          <Button content={
-            <Link to='/login/criar' >Cadastro</Link>
-          } />
+          <a href="/login/criar">
+            <Button content={<Link>Cadastro</Link>} />
+          </a>
         </div>        
       </section>
     </>
