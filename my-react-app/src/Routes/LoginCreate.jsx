@@ -1,33 +1,33 @@
-import React, { useContext } from 'react';
-//import { USER_POST } from '../Api/api';
+import React, { useContext, useState } from 'react';
 import Button from '../Components/Button';
 import ErrorMsg from '../Components/ErrorMsg';
 import Head from '../Components/Head';
 import Input from '../Components/Input';
 import Title from '../Components/Title';
-import { UserContext } from '../context/UserContext.jsx'; // Corrija o caminho se necessário
+import { UserContext } from '../context/UserContext'; // Corrija o caminho se necessário
 import useFetch from '../Utils/useFetch';
 import useForm from '../Utils/useForm';
+import { registerUser } from '../api/cadastro'; // Importe a nova função
 
 function LoginCreate() {
   const username = useForm();
   const password = useForm('password');
   const email = useForm('email');
 
-  const { setUser } = useContext(UserContext); // Corrija para o método correto
-
-  const { loading, error, request } = useFetch();
+  const { setUser } = useContext(UserContext);
+  const [error, setError] = useState(null); // Estado para erros
+  const { loading, request } = useFetch();
 
   async function handleSubmit(event) {
     event.preventDefault();
-    const { url, options } = USER_POST({
-      username: username.value,
-      email: email.value,
-      password: password.value,
-    });
-    const { response } = await request(url, options);
-    if (response.ok) setUser({ username: username.value }); // Ajuste conforme necessário
-    console.log(response);
+    try {
+      const data = await registerUser(username.value, email.value, password.value);
+      setUser({ username: data.name }); // Ajuste conforme necessário
+      console.log('Cadastro bem-sucedido:', data);
+    } catch (err) {
+      console.error(err);
+      setError(err.message); // Atualize o estado de erro
+    }
   }
 
   return (
@@ -36,7 +36,7 @@ function LoginCreate() {
       <Title type="h1">Cadastre-se</Title>
 
       <form onSubmit={handleSubmit}>
-        <Input label="Usuario" type="text" name="username" {...username} />
+        <Input label="Usuário" type="text" name="username" {...username} />
         <Input label="E-mail" type="email" name="email" {...email} />
         <Input label="Senha" type="password" name="password" {...password} />
 

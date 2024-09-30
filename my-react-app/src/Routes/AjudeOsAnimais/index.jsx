@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import QRCode from 'qrcode';
-import Pix from '../../api/pix';
+import Pix from '../../Utils/pix';
 import './style.css';
 
 function Ajude() {

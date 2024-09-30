@@ -1,50 +1,41 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Button from '../Components/Button';
 import ErrorMsg from '../Components/ErrorMsg';
 import Head from '../Components/Head';
 import Input from '../Components/Input';
 import Title from '../Components/Title';
 import useForm from '../Utils/useForm';
+import { loginUser } from '../api/login'; // Atualize a importação
 
 function LoginForm() {
   const username = useForm();
   const password = useForm();
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   async function handleSubmit(event) {
     event.preventDefault();
-    
+
     if (username.validate() && password.validate()) {
       setLoading(true);
+      setError(null); // Resetar erro antes da nova tentativa
+
       try {
-        // Simular uma chamada de API para login
-        // Substitua o código abaixo pela chamada real para autenticação
-        const response = await fakeLogin(username.value, password.value);
+        const data = await loginUser(username.value, password.value);
         
-        if (response.success) {
-          // Redirecionar ou atualizar estado de autenticação
+        if (data.token) {
+          localStorage.setItem('token', data.token);
           console.log('Login bem-sucedido');
-        } else {
-          setError('Dados incorretos.');
+          navigate('/'); // Redirecionar após login
         }
       } catch (err) {
-        setError('Erro inesperado. Tente novamente.');
+        setError(err.message);
       } finally {
         setLoading(false);
       }
     }
-  }
-
-  // Função simulada para login (substitua com a lógica real)
-  async function fakeLogin(username, password) {
-    // Simulação de sucesso ou falha de login
-    return new Promise((resolve) =>
-      setTimeout(() => {
-        resolve({ success: username === 'admin' && password === 'password' });
-      }, 1000)
-    );
   }
 
   return (
