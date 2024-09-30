@@ -39,7 +39,7 @@ class CharactersController {
         page = 1; // Defina o valor padrão como 1
     }
 
-      const limit = 20;
+      const limit = +20;
       const offset = (page - 1) * limit;
 
       // Buscando personagens na base de dados
