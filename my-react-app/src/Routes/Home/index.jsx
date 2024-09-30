@@ -6,7 +6,7 @@ import './style.css';
 function Home() {
   return (
     <section className="StyledHome container main-container">
-      <Head title="Fotos" description="Home do site dogs, com o feed de fotos." />
+      <Head title="Fotos" description="Home da rede social cats, com o feed de fotos." />
       <Feed />
     </section>
   );

@@ -12,7 +12,7 @@ import NotFound from './Routes/NotFound';
 //import ProtectedRoute from './Routes/ProtectedRoute';
 import User from './Routes/User';
 import UserProfile from './Routes/UserProfile';
-
+import Ajude from '../src/Routes/AjudeOsAnimais/index';
 function App() {
   return (
  
@@ -21,6 +21,7 @@ function App() {
         <main className='App-body'>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="doe" element={<Ajude />} />
             <Route path="login/*" element={<Login />} />
             <Route path="photo/:id" element={<Photo />} />
             <Route path="perfil/:user" element={<UserProfile />} />
