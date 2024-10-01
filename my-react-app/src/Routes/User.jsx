@@ -1,18 +1,19 @@
 import React, { useContext } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom'; // Certifique-se de que Navigate está importado
+import Head from '../Components/Head';
 import UserHeader from '../Components/UserHeader';
+import UserContext from '../context/UserContext'; // Corrigido aqui
 import Feed from './Feed';
+import NotFound from './NotFound';
 import UserPhotoPost from './UserPhotoPost';
 import UserStats from './UserStats';
-import { UserContext } from '../context/UserContext'; // Corrigido aqui
-import Head from '../Components/Head';
-import NotFound from './NotFound';
 
 function User() {
   const { user } = useContext(UserContext); // Corrigido aqui
 
+  // Redireciona para login se user for undefined
   if (!user) {
-    return <Navigate to="/login" />; // Redireciona para login se user for undefined
+    return <Navigate to="/login" />;
   }
 
   return (

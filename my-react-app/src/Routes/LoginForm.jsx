@@ -56,12 +56,12 @@ function LoginForm() {
         <Link to='/login/perdeu' className='lost'>Esqueceu a senha?</Link>
 
         <div className='cadastro'>
-          <Title type='h2'>Cadastre-se</Title>
-          <p>Ainda não possui conta? Cadastre-se no site.</p>
-          <a href="/login/criar">
-            <Button content={<Link>Cadastro</Link>} />
-          </a>
-        </div>        
+            <Title type='h2'>Cadastre-se</Title>
+            <p>Ainda não possui conta? Cadastre-se no site.</p>
+            <Link to="/login/criar">
+                <Button content="Cadastro" /> {/* Passe apenas o texto */}
+            </Link>
+        </div>    
       </section>
     </>
   );

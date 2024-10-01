@@ -10,12 +10,13 @@ class UserController {
       throw new Error("name, email e password são obrigatórios.");
     }
 
-    const passwordHashed = bcrypt.hash(password, salts)
+    const passwordHashed = await bcrypt.hash(password, salts);  // Adicione await
 
     const userValue = await user.create({
       name,
       email,
       password: passwordHashed,
+      role: 'viewer' // Adicione um valor padrão ou receba o valor do body
     });
 
     return userValue;

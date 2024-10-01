@@ -3,19 +3,19 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Footer from './Components/Footer';
 import Header from './Components/Header';
 import Photo from './Components/Photo';
-import { UserProvider } from './context/UserContext'; // Import your UserProvider
+import { UserProvider } from './context/UserContext'; // Importa o UserProvider
 import './index.css';
+import Ajude from './Routes/AjudeOsAnimais'; // Corrigido para um caminho mais claro
 import Home from './Routes/Home';
 import Login from './Routes/Login';
 import NotFound from './Routes/NotFound';
 import ProtectedRoute from './Routes/ProtectedRoute';
 import User from './Routes/User';
 import UserProfile from './Routes/UserProfile';
-import Ajude from '../src/Routes/AjudeOsAnimais/index';
 
 function App() {
   return (
-    <UserProvider> {/* Envolva o BrowserRouter com UserProvider */}
+    <UserProvider> {/* Envolve o BrowserRouter com UserProvider */}
       <BrowserRouter>
         <Header />
         <main className='App-body'>

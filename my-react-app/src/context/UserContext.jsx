@@ -1,13 +1,26 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
-export const UserContext = createContext();
+// Criação do contexto
+const UserContext = createContext();
 
+// Provider do contexto
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+    const [user, setUser] = useState(null);
 
-  return (
-    <UserContext.Provider value={{ user, setUser }}>
-      {children}
-    </UserContext.Provider>
-  );
+    const userLogout = () => {
+        // Lógica de logout aqui
+        setUser(null);
+    };
+
+    return (
+        <UserContext.Provider value={{ user, setUser, userLogout }}>
+            {children}
+        </UserContext.Provider>
+    );
 };
+
+// Hook personalizado para acessar o contexto
+export const useUserContext = () => useContext(UserContext);
+
+// Exportação padrão do contexto
+export default UserContext;
