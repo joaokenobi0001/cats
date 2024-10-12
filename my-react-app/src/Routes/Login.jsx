@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { UserContext } from '../context/UserContext'; // Corrija o caminho se necessário
+import UserContext from '../context/UserContext'; // Importa corretamente o UserContext
 
 import LoginCreate from './LoginCreate';
 import LoginForm from './LoginForm';

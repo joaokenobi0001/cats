@@ -15,16 +15,17 @@ class UserApi {
     }
 
     async createUser(req, res) {
-        const { name, email, password } = req.body
-
+        const { name, email, password, role = 'viewer' } = req.body; 
+    
         try {
-            const user = await UserController.createUser(name, email, password);
-            return res.status(201).send(user)
+            const user = await UserController.createUser(name, email, password, role);
+            return res.status(201).send(user);
         } catch (e) {
-            console.log(e)
-            res.status(400).send('Deu erro')
+            console.log(e);
+            res.status(400).send('Deu erro');
         }
     }
+    
 
     async updateUser(req, res) {
         const { id } = req.params

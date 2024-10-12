@@ -6,7 +6,7 @@ const userRouter = express.Router();
 
 userRouter.post('/login',  UserApi.login);
 userRouter.get('/', authMiddleware(['admin', 'viewer']), UserApi.findUser);
-userRouter.post('/', authMiddleware(['admin']), UserApi.createUser);
+userRouter.post('/', UserApi.createUser);
 userRouter.put('/:id', authMiddleware(), UserApi.updateUser);
 userRouter.delete('/:id', UserApi.deleteUser);
 

@@ -1,17 +1,17 @@
-import React, { useContext } from 'react';
+// src/Routes/ProtectedRoute.jsx
+import React from 'react';
 import { Navigate } from 'react-router-dom';
-import UserContext from '../context/UserContext';
+import { useUserContext } from '../context/UserContext'; // Certifique-se de importar corretamente
 
-function ProtectedRoute({ children }) {
-  const { login } = useContext(UserContext);
+const ProtectedRoute = ({ children }) => {
+    const { user } = useUserContext() || {}; // Use o hook para obter o usuário
 
-  if (login === true) {
-    return children;
-  } else if (login === false) {
-    return <Navigate to="/login" />;
-  } else {
-    return <></>;
-  }
-}
+    if (!user) {
+        // Se não houver usuário, redirecione para o login
+        return <Navigate to="/login" />;
+    }
+
+    return children; // Retorne os filhos se o usuário estiver autenticado
+};
 
 export default ProtectedRoute;

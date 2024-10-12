@@ -1,18 +1,19 @@
 const express = require('express');
 const cors = require('cors'); // Importa o pacote cors
 const userRouter = require('./routes/user');
-const characterRouter = require('./routes/character');
+
 const database = require('./config/database');
+const  gatosRouter = require('./routes/gatos');
 
 const app = express();
 app.use(express.json());
 app.use(cors()); // Habilita CORS para todas as rotas
 
 app.use("/api/v1/user", userRouter);
-app.use("/api/v1/character", characterRouter);
+app.use("/api/v1/gatos", gatosRouter);
 
 database.db
-    .sync({ force: false })
+    .sync({ force: true })
     .then((_) => {
         app.listen(3000, () => {
             console.info('Servidor rodando na porta 3000');

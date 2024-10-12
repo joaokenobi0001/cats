@@ -7,10 +7,10 @@ class Database {
 
     init(){
         this.db = new Sequelize({
-            database: "api-rick-and-morty",
+            database: "api-cats",
             host: "localhost",
             username: "root",
-            password: "8525",
+            password: "",
             dialect: "mysql"
         })
     }
