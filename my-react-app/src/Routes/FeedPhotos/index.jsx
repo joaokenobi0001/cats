@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { fetchCatImages } from '../../api/api'; // Função da API de gatos
-import { fetchCharacters } from '../../api/RickAndMorty'; // Função da API de Rick and Morty
 import ErrorMsg from '../../Components/ErrorMsg';
 import FeedPhotosItem from '../../Components/FeedPhotosItem';
 import Loading from '../../Components/Loading';
@@ -11,16 +10,10 @@ function FeedPhotos({ setModalPhoto }) {
   const [page, setPage] = useState(1);
   const { data, loading, error, request } = useFetch();
   const [hasMore, setHasMore] = useState(true);
-  const [apiType, setApiType] = useState('cats'); // Estado para controlar a API
-  const [characters, setCharacters] = useState([]); // Estado para personagens
+  const [apiType] = useState('cats'); // Estado para controlar a API
+ 
 
-  // Alternar entre APIs
-  const handleApiChange = (type) => {
-    setApiType(type);
-    setPage(1); // Reiniciar a paginação
-    setHasMore(true); // Resetar o estado de rolagem
-    setCharacters([]); // Limpar personagens ao mudar de API
-  };
+ 
 
   // Busca de fotos de gatos
   useEffect(() => {
@@ -40,21 +33,7 @@ function FeedPhotos({ setModalPhoto }) {
     }
   }, [page, request, apiType]);
 
-  // Busca de personagens
-  useEffect(() => {
-    if (apiType === 'characters') {
-      const getCharacters = async () => {
-        try {
-          const data = await fetchCharacters();
-          setCharacters(data); // Aqui capturamos diretamente o `results`
-          setHasMore(false); // Desativamos o scroll infinito para personagens
-        } catch (error) {
-          console.error('Erro ao buscar personagens:', error);
-        }
-      };
-      getCharacters();
-    }
-  }, [apiType]);
+ 
 
   // Scroll infinito para gatos
   const handleScroll = useCallback(() => {
@@ -78,30 +57,7 @@ function FeedPhotos({ setModalPhoto }) {
 
   return (
     <div className="feed-photos-container">
-      {/* Botões para alternar entre APIs */}
-      <div className="api-selector">
-        <button onClick={() => handleApiChange('cats')} className={apiType === 'cats' ? 'active' : ''}>
-          Gatos
-        </button>
-        <button onClick={() => handleApiChange('characters')} className={apiType === 'characters' ? 'active' : ''}>
-          Rick and Morty
-        </button>
-      </div>
-
-      {/* Renderiza personagens ou fotos de gatos */}
-      {apiType === 'characters' ? (
-        <div className="characters-grid">
-          {characters.map((character) => (
-            <div key={character.id} className="character-card">
-              <img src={character.image} alt={character.name} className="character-img" />
-              <h2>{character.name}</h2>
-              <p>Espécie: {character.species}</p>
-              <p>Gênero: {character.gender}</p>
-              <p>Status: {character.status}</p>
-            </div>
-          ))}
-        </div>
-      ) : (
+    
         <ul className="feed-photos-list">
           {data && data.map((photo) => (
             <FeedPhotosItem
@@ -112,7 +68,7 @@ function FeedPhotos({ setModalPhoto }) {
           ))}
           {loading && <Loading />}
         </ul>
-      )}
+      
     </div>
   );
 }

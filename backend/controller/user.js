@@ -1,93 +1,140 @@
-const user = require("../model/user");
-const jwt = require('jsonwebtoken')
+const User = require("../model/user");
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-
 const salts = 12;
 
 class UserController {
-  async createUser(name, email, password) {
-    if (!name || !email || !password) {
-      throw new Error("name, email e password são obrigatórios.");
+    async createUser(name, email, password, requestingUser) {
+        if (!name || !email || !password) {
+            throw new Error("name, email e password são obrigatórios.");
+        }
+
+        if (!this.isAdmin(requestingUser)) {
+            throw new Error("Apenas administradores podem criar outros usuários.");
+        }
+
+        const passwordHashed = await bcrypt.hash(password, salts);
+        const userValue = await User.create({
+            name,
+            email,
+            password: passwordHashed,
+            role: requestingUser.role === 'admin' ? 'admin' : 'viewer'
+        });
+
+        return userValue;
     }
 
-    const passwordHashed = await bcrypt.hash(password, salts);  // Adicione await
+    async findUser(id) {
+        if (id === undefined) {
+            throw new Error("Id é obrigatório.");
+        }
+    
+        const userValue = await User.findByPk(id);
+        if (!userValue) {
+            throw new Error("Usuário não encontrado.");
+        }
+    
+        if (userValue.isBlocked) {
+            throw new Error("Usuário bloqueado.");
+        }
+    
+        return userValue;
+    }
+    
+    async update(id, name, email, password, requestingUser) {
+        const oldUser = await User.findByPk(id);
+    
+        if (!oldUser) {
+            throw new Error("Usuário não encontrado.");
+        }
+    
+        // Verifica se o usuário que está tentando editar é o mesmo ou um administrador
+        if (requestingUser.role !== 'admin' && requestingUser.id !== id) {
+            throw new Error("Você não tem permissão para editar este usuário.");
+        }
+    
+        // Verifica se o usuário está bloqueado
+        if (oldUser.isBlocked) {
+            throw new Error("Usuário bloqueado.");
+        }
+    
+        // Atualiza os dados do usuário
+        oldUser.name = name || oldUser.name;
+        oldUser.email = email || oldUser.email;
+    
+        if (password) {
+            oldUser.password = await bcrypt.hash(password, salts);
+        }
+    
+        await oldUser.save();
+        return oldUser;
+    }
+    
+    
+    
+    async delete(id, requestingUser) {
+        if (id === undefined) {
+            throw new Error("Id é obrigatório.");
+        }
 
-    const userValue = await user.create({
-      name,
-      email,
-      password: passwordHashed,
-      role: 'viewer' // Adicione um valor padrão ou receba o valor do body
-    });
+        const userValue = await this.findUser(id);
 
-    return userValue;
-  }
+        if (requestingUser.role !== 'admin' && requestingUser.id !== id) {
+            throw new Error("Você não tem permissão para deletar este usuário.");
+        }
 
-  async findUser(id) {
-    if (id === undefined) {
-      throw new Error("Id é obrigatório.");
+        await userValue.destroy();
     }
 
-    const userValue = await user.findByPk(id);
-
-    if (!userValue) {
-      throw new Error("Usuário não encontrado.");
+    async findAll() {
+        return User.findAll();
     }
 
-    return userValue;
-  }
+    async login(email, password) {
+        const userLogged = await User.findOne({ where: { email } });
 
-  async update(id, name, email, password) {
-    const oldUser = await user.findByPk(id);
-    if(email){
-      const sameEmail = await user.findOne({ where: { email } });
-      if (sameEmail && sameEmail.id !== id) {
-        throw new Error("Email já cadastrado.");
-      }
+        if (!userLogged) {
+            throw new Error("Email ou senha inválido. Tente novamente.");
+        }
+
+        const validPassword = await bcrypt.compare(password, userLogged.password);
+        if (!validPassword || userLogged.isBlocked) {
+            throw new Error("Email ou senha inválido. Tente novamente.");
+        }
+
+        return jwt.sign(
+            { id: userLogged.id, email: userLogged.email, role: userLogged.role },
+            'MeuSegredo123!'
+        );
     }
 
-    // achar a melhor forma de fazer isso daqui (ternário)
-    const passwordHashed = bcrypt.hash(password, salts)
-    oldUser.name = name || oldUser.name;
-    oldUser.email = email || oldUser.email;
-    oldUser.password = passwordHashed;
-
-    oldUser.save();
-
-    return oldUser;
-  }
-
-  async delete(id) {
-    if (id === undefined) {
-      throw new Error("Id é obrigatório.");
-    }
-    const userValue = await this.findUser(id);
-    userValue.destroy();
-
-    return;
-  }
-
-  async findAll() {
-    return user.findAll();
-  }
-
-  async login(email, password) {
-    const userLogged = await user.findOne({ where: { email } });
-
-    if(!userLogged){
-      throw new Error("Email ou senha inválido. Tente novamente.")
+    isAdmin(user) {
+        return user && user.role === 'admin';
     }
 
-    const validPassword = bcrypt.compare(password, userLogged.password);
+    async blockUser(id, requestingUser) {
+        if (!this.isAdmin(requestingUser)) {
+            throw new Error("Apenas administradores podem bloquear usuários.");
+        }
 
-    if(!validPassword){
-      throw new Error("Email ou senha inválido. Tente novamente.")
+        const user = await this.findUser(id);
+        user.isBlocked = true;
+        await user.save();
     }
 
-    return jwt.sign(
-      { id: userLogged.id, email: userLogged.email },
-      'MeuSegredo123!'
-    )
-  }
+    async unblockUser(id, requestingUser) {
+        if (!this.isAdmin(requestingUser)) {
+            throw new Error("Apenas administradores podem desbloquear usuários.");
+        }
+
+        const user = await User.findByPk(id);
+        if (!user) {
+            throw new Error("Usuário não encontrado.");
+        }
+
+        user.isBlocked = false;
+        await user.save();
+    }
 }
 
 module.exports = new UserController();

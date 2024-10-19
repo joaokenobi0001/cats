@@ -138,3 +138,17 @@ Bem-vindo ao projeto de rede social para gatos! Este guia fornece uma visão ger
   - Manter dependências atualizadas e garantir a compatibilidade com novas versões do React e outras bibliotecas.
 
 
+Desenvolva um backend que tenha as seguintes funcionalidades:
+
+Gestão de Usuários: Implemente um sistema de controle de usuários com dois tipos de perfis:
+Administrador (Admin);
+Usuário Comum (Viewer).
+CRUD de Informações: Implemente um CRUD (Criar, Ler, Atualizar e Excluir) para gerenciar as informações provenientes da API pública que vocês escolherem.
+
+Regras de Acesso:
+Apenas um administrador pode criar e gerenciar (editar, excluir) outros administradores.
+O administrador tem permissão para bloquear ou desbloquear usuários comuns.
+Apenas o administrador pode efetuar o CRUD de informações da API pública.
+Usuários comuns podem alterar seus próprios dados e deletar a própria conta;
+Usuários comuns podem acessar as informações que vierem da API (Ele deixará de visualizar caso esteja bloqueado).
+
