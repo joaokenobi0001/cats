@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { fetchCatImages } from '../../api/api'; // Função da API de gatos
+import { fetchCatImages } from '../../api/cats'; // Função da API de gatos
 import ErrorMsg from '../../Components/ErrorMsg';
 import FeedPhotosItem from '../../Components/FeedPhotosItem';
 import Loading from '../../Components/Loading';

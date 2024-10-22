@@ -6,7 +6,7 @@ import Head from '../Components/Head';
 import Input from '../Components/Input';
 import Title from '../Components/Title';
 import useForm from '../Utils/useForm';
-import { loginUser } from '../api/login'; // Atualize a importação
+import { loginUser } from '../api/user'; // Atualize a importação
 
 function LoginForm() {
   const username = useForm();
@@ -45,7 +45,7 @@ function LoginForm() {
         <Title type='h1'>Login</Title>
 
         <form className="form" onSubmit={handleSubmit}>
-          <Input name="user" label="Usuário" type="text" {...username} />
+          <Input name="e-mail" label="E-mail" type="text" {...username} />
           <Input name="password" label="Senha" type="password" {...password} />
 
           {loading ? <Button content="Carregando" disabled /> : <Button content="Entrar" />}
@@ -55,13 +55,7 @@ function LoginForm() {
 
         <Link to='/login/perdeu' className='lost'>Esqueceu a senha?</Link>
 
-        <div className='cadastro'>
-            <Title type='h2'>Cadastre-se</Title>
-            <p>Ainda não possui conta? Cadastre-se no site.</p>
-            <Link to="/login/criar">
-                <Button content="Cadastro" /> {/* Passe apenas o texto */}
-            </Link>
-        </div>    
+          
       </section>
     </>
   );

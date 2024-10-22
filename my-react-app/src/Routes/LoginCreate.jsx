@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { registerUser } from '../api/cadastro'; // Importe a nova função
+import { registerUser } from '../api/user'; // Importe a nova função
 import Button from '../Components/Button';
 import ErrorMsg from '../Components/ErrorMsg';
 import Head from '../Components/Head';

@@ -10,3 +10,4 @@ export function fetchCatImages(page, limit) {
 
   return { url, options };
 }
+

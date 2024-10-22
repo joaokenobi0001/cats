@@ -13,10 +13,23 @@ class UserApi {
 
     async createUser(req, res) {
         const { name, email, password } = req.body; 
-        const requestingUser = req.user; // Supondo que o middleware de autenticação define req.user
+
 
         try {
-            const user = await UserController.createUser(name, email, password, requestingUser);
+            const user = await UserController.createUser(name, email, password, 'viewer');
+            return res.status(201).send(user);
+        } catch (e) {
+            console.error(e);
+            res.status(400).send({ error: e.message });
+        }
+    }
+
+    async createUserAdmin(req, res) {
+        const { name, email, password } = req.body; 
+ 
+
+        try {
+            const user = await UserController.createUser(name, email, password, 'admin');
             return res.status(201).send(user);
         } catch (e) {
             console.error(e);
@@ -62,6 +75,34 @@ class UserApi {
             res.status(400).send({ error: e.message });
         }
     }
+
+    async blockUser(req, res) {
+        const { id } = req.params; 
+        const { requestingUser } = req.body;
+    
+        try {
+            const blockedUser = await UserController.blockUser(id, requestingUser);
+            res.send({ message: "Usuário bloqueado com sucesso", user: blockedUser });
+        } catch (e) {
+            console.error(e);
+            res.status(400).send({ error: e.message });
+        }
+    }
+    
+    async unblockUser(req, res) {
+        const { id } = req.params; 
+        const { requestingUser } = req.body;
+    
+        try {
+            const unblockedUser = await UserController.unblockUser(id, requestingUser);
+            res.send({ message: "Usuário desbloqueado com sucesso", user: unblockedUser });
+        } catch (e) {
+            console.error(e);
+            res.status(400).send({ error: e.message });
+        }
+    }
+
+    
 }
 
 module.exports = new UserApi();

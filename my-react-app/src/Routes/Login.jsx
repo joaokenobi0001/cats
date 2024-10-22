@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import UserContext from '../context/UserContext'; // Importa corretamente o UserContext
 
-import LoginCreate from './LoginCreate';
+//import LoginCreate from './LoginCreate';
 import LoginForm from './LoginForm';
 import LoginPasswordLost from './LoginPasswordLost';
 import LoginPasswordReset from './LoginPasswordReset';
@@ -17,7 +17,6 @@ function Login() {
       <div className='forms'>
         <Routes>
           <Route path='/' element={<LoginForm />} />
-          <Route path='criar' element={<LoginCreate />} />
           <Route path='perdeu' element={<LoginPasswordLost />} />
           <Route path='resetar' element={<LoginPasswordReset />} />
           <Route path="*" element={<NotFound />} />

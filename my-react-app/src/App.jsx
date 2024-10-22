@@ -15,7 +15,7 @@ import UserProfile from './Routes/UserProfile';
 
 function App() {
   return (
-    <UserProvider> {/* Envolve o BrowserRouter com UserProvider */}
+    <UserProvider> 
       <BrowserRouter>
         <Header />
         <main className='App-body'>

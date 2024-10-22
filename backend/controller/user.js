@@ -4,13 +4,9 @@ const bcrypt = require('bcrypt');
 const salts = 12;
 
 class UserController {
-    async createUser(name, email, password, requestingUser) {
+    async createUser(name, email, password, role) {
         if (!name || !email || !password) {
             throw new Error("name, email e password são obrigatórios.");
-        }
-
-        if (!this.isAdmin(requestingUser)) {
-            throw new Error("Apenas administradores podem criar outros usuários.");
         }
 
         const passwordHashed = await bcrypt.hash(password, salts);
@@ -18,7 +14,7 @@ class UserController {
             name,
             email,
             password: passwordHashed,
-            role: requestingUser.role === 'admin' ? 'admin' : 'viewer'
+            role
         });
 
         return userValue;
@@ -108,7 +104,7 @@ class UserController {
         );
     }
 
-    isAdmin(user) {
+    async isAdmin(user) {
         return user && user.role === 'admin';
     }
 

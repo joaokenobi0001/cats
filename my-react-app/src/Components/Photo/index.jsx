@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import useFetch from '../../Utils/useFetch'
-//import { PHOTO_GET } from '../../api/api'
+//import { getPosts } from '../../api/cats'
 import ErrorMsg from '../ErrorMsg'
 import Loading from '../Loading'
 import PhotoContent from '../PhotoContent'
@@ -11,7 +11,7 @@ function Photo() {
   const { data, loading, error, request } = useFetch()
 
   useEffect(() => {
-    const { url, options } = PHOTO_GET(id)
+    const { url, options } = getPosts(id)
     request(url, options)
   }, [id, request])
 

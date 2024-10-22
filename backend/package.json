@@ -4,6 +4,7 @@
   "description": "Aplicação rede social",
   "main": "index.js",
   "scripts": {
+    "dev": "node --watch index.js",
     "test": "jest"
   },
   "author": "Eduardo Hansen",
