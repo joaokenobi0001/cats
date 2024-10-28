@@ -1,39 +1,66 @@
-import axios from 'axios';
+const API_URL = 'http://localhost:3000/api/v1/user';
 
-const API_URL = 'http://localhost:3000/api/v1/user/login';
-const REGISTER_URL = 'http://localhost:3000/api/v1/user';
+export async function tokenValidate(token) {
+  return {
+    url: API_URL + '/validate',
+    options: {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    },
+  }
+}
 
-export async function registerUser(username, email, password) {
+export async function userGet(token) {
+  return {
+    url: API_URL + '/token',
+    options: {
+      method: 'GET',
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    },
+  }
+}
+
+export async function loginUser(body) {
+  return {
+    url: API_URL + '/login',
+    options: {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    },
+  }
+}
+
+
+/*
+export async function registerUser(body) {
   try {
-    const response = await axios.post(REGISTER_URL, {
-      name: username,
-      email,
-      password,
-      role: 'admin', 
-    });
-    return response.data;
+    return {
+      url: API_URL + '/admin',
+      options: {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      },
+    }
   } catch (error) {
     console.error('Erro ao cadastrar:', error.response ? error.response.data : error);
     throw new Error('Erro ao cadastrar. Tente novamente.');
   }
 }
 
-export async function loginUser(email, password) {
-  try {
-    const response = await axios.post(API_URL, {
-      email,
-      password,
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Erro ao fazer login:', error.response ? error.response.data : error);
-    throw new Error('Email ou senha inválido. Tente novamente.');
-  }
-}
 
 export async function bloquearUser(id, requestingUser) {
   try {
-    const response = await axios.post(`http://localhost:3000/api/v1/user/${id}/block`, {
+    const response = await axios.post(API_URL + `/${id}/block`, {
       requestingUser,
     });
     return response.data;
@@ -45,7 +72,7 @@ export async function bloquearUser(id, requestingUser) {
 
 export async function desbloquearUser(id, requestingUser) {
   try {
-    const response = await axios.post(`http://localhost:3000/api/v1/user/${id}/unblock`, {
+    const response = await axios.post(API_URL + `/${id}/unblock`, {
       requestingUser,
     });
     return response.data;
@@ -54,3 +81,4 @@ export async function desbloquearUser(id, requestingUser) {
     throw new Error('Erro ao desbloquear usuário. Tente novamente.');
   }
 }
+*/

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import FeedPhotos from '../FeedPhotos';
+import FeedPhotos from '../FeedPhotosHome';
 
-function Feed() {
+function FeedHome() {
   const [page, setPage] = useState(1);
   const [infinite, setInfinite] = useState(true);
   const [modalPhoto, setModalPhoto] = useState(null);
@@ -25,4 +25,4 @@ function Feed() {
   );
 }
 
-export default Feed;
+export default FeedHome;

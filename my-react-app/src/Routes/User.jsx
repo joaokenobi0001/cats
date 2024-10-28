@@ -1,19 +1,18 @@
 import React, { useContext } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom'; 
+import { Route, Routes } from 'react-router-dom';
 import Head from '../Components/Head';
 import UserHeader from '../Components/UserHeader';
-import UserContext from '../context/UserContext'; 
+import UserContext from '../context/UserContext';
 import Feed from './Feed';
 import NotFound from './NotFound';
 import UserPhotoPost from './UserPhotoPost';
-import UserStats from './UserStats';
+import Users from './Users';
 
 function User() {
-  const { user } = useContext(UserContext); 
+  const { data } = useContext(UserContext);
 
-
-  if (!user) {
-    return <Navigate to="/login" />;
+  if (!data) {
+    return null; 
   }
 
   return (
@@ -21,9 +20,13 @@ function User() {
       <Head title="Minha conta" />
       <UserHeader />
       <Routes>
-        <Route path="/" element={<Feed user={user.token} />} />
-        <Route path="postar" element={<UserPhotoPost />} />
-        <Route path="estatisticas" element={<UserStats />} />
+        <Route path="/" element={<Feed user={data.user.id} />} />
+        {data.user.role === 'admin' && (
+          <>
+            <Route path="postar" element={<UserPhotoPost />} />
+            <Route path="usuarios" element={<Users />} />
+          </>
+        )}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </section>

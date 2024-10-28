@@ -1,40 +1,22 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import Button from '../Components/Button';
 import ErrorMsg from '../Components/ErrorMsg';
 import Head from '../Components/Head';
 import Input from '../Components/Input';
 import Title from '../Components/Title';
 import useForm from '../Utils/useForm';
-import { loginUser } from '../api/user'; // Atualize a importação
+import UserContext from '../context/UserContext';
 
 function LoginForm() {
-  const username = useForm();
-  const password = useForm();
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const email = useForm(); 
+  const password = useForm(); 
+  const { userLogin, error, loading } = useContext(UserContext);
 
   async function handleSubmit(event) {
     event.preventDefault();
-
-    if (username.validate() && password.validate()) {
-      setLoading(true);
-      setError(null); // Resetar erro antes da nova tentativa
-
-      try {
-        const data = await loginUser(username.value, password.value);
-        
-        if (data.token) {
-          localStorage.setItem('token', data.token);
-          console.log('Login bem-sucedido');
-          navigate('/'); // Redirecionar após login
-        }
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
+    if (email.validate() && password.validate()) {
+      userLogin(email.value, password.value); 
     }
   }
 
@@ -43,19 +25,13 @@ function LoginForm() {
       <Head title="Login" />
       <section className='animeLeft'>
         <Title type='h1'>Login</Title>
-
         <form className="form" onSubmit={handleSubmit}>
-          <Input name="e-mail" label="E-mail" type="text" {...username} />
+          <Input name="email" label="E-mail" type="text" {...email} /> 
           <Input name="password" label="Senha" type="password" {...password} />
-
           {loading ? <Button content="Carregando" disabled /> : <Button content="Entrar" />}
-
-          <ErrorMsg error={error} />
+          <ErrorMsg error={error && 'Dados incorretos.'} />
         </form>
-
         <Link to='/login/perdeu' className='lost'>Esqueceu a senha?</Link>
-
-          
       </section>
     </>
   );

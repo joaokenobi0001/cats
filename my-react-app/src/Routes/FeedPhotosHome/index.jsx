@@ -1,32 +1,29 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { GET_CATS } from '../../api/cats';
+import { fetchCatImages } from '../../api/cats'; // Função da API de gatos
 import ErrorMsg from '../../Components/ErrorMsg';
-import FeedPhotosItem from '../../Components/FeedPhotosItem';
+import FeedPhotosItem from '../../Components/FeedPhotosItemHome';
 import Loading from '../../Components/Loading';
-import useFetch from '../../Utils/useFetch';
-import './style.css';
+import useFetch from '../../Utils/useFetch'; // Hook useFetch
+import '../FeedPhotosHome/style.css';
 
 function FeedPhotos({ setModalPhoto }) {
   const [page, setPage] = useState(1);
   const { data, loading, error, request } = useFetch();
   const [hasMore, setHasMore] = useState(true);
-  const [photos, setPhotos] = useState([]);
+  const [apiType] = useState('cats'); 
 
-  const [apiType] = useState('cats');
+
 
   // Busca de fotos de gatos
   useEffect(() => {
     if (apiType === 'cats') {
       async function fetchPhotos() {
-        const total = 1; // Define o número de fotos por requisição
-        const { url, options } = GET_CATS(page, total);
+        const total = 3;
+        const { url, options } = fetchCatImages(page, total);
         const { response, json } = await request(url, options);
 
         if (response && response.ok) {
-          if (json.results.length < total) {
-            setHasMore(false);
-          }
-          setPhotos((prevPhotos) => [...prevPhotos, ...json.results]); // Atualiza o estado com as novas fotos
+          if (json.length < total) setHasMore(false);
         } else {
           setHasMore(false);
         }
@@ -34,6 +31,8 @@ function FeedPhotos({ setModalPhoto }) {
       fetchPhotos();
     }
   }, [page, request, apiType]);
+
+ 
 
   // Scroll infinito para gatos
   const handleScroll = useCallback(() => {
@@ -57,16 +56,18 @@ function FeedPhotos({ setModalPhoto }) {
 
   return (
     <div className="feed-photos-container">
-      <ul className="feed-photos-list">
-        {photos.map((photo) => (
-          <FeedPhotosItem
-            photo={photo}
-            key={photo.id}
-            setModalPhoto={setModalPhoto}
-          />
-        ))}
-        {loading && <Loading />}
-      </ul>
+    
+        <ul className="feed-photos-list">
+          {data && data.map((photo) => (
+            <FeedPhotosItem
+              photo={photo}
+              key={photo.id}
+              setModalPhoto={setModalPhoto}
+            />
+          ))}
+          {loading && <Loading />}
+        </ul>
+      
     </div>
   );
 }

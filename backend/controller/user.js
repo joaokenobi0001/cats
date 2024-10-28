@@ -87,6 +87,10 @@ class UserController {
     }
 
     async login(email, password) {
+        if (email === undefined || password === undefined) {
+            throw new Error("Email e senha são obrigatórios.");
+        }
+
         const userLogged = await User.findOne({ where: { email } });
 
         if (!userLogged) {
@@ -100,7 +104,7 @@ class UserController {
 
         return jwt.sign(
             { id: userLogged.id, email: userLogged.email, role: userLogged.role },
-            'MeuSegredo123!'
+            'MeuSegredo123!', { expiresIn: 60 * 60 }
         );
     }
 

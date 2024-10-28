@@ -1,3 +1,4 @@
+/* Estilos para a visualização desktop */
 .StyledHeaderUserNav {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -38,10 +39,7 @@
   fill: #fb1;
 }
 
-.mobile-button {
-  display: none;
-}
-
+/* Estilos para a visualização mobile */
 .StyledHeaderUserNav.mobile {
   display: block;
   position: absolute;
@@ -49,11 +47,12 @@
   right: 0;
   padding: 0 1rem;
   background: white;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   border-radius: .2rem;
   transform: translateX(-10px);
   opacity: 0;
   visibility: hidden;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .StyledHeaderUserNav.mobile a,
@@ -81,8 +80,8 @@
   margin-right: .5rem;
 }
 
+/* Estilo para o estado ativo do menu mobile */
 .StyledHeaderUserNav.mobile.active {
-  transition: .30s;
   transform: initial;
   opacity: 1;
   z-index: 100;

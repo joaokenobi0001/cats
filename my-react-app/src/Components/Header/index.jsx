@@ -1,21 +1,24 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import './style.css'; // Importa o CSS
+import UserContext from '../../context/UserContext';
+import './style.css';
 
-function Header({ user }) {
+function Header() {
+  const { data } = useContext(UserContext); 
+
   return (
     <header className="StyledHeader">
       <nav className="container">
-        <Link className="logo" to="/" aria-label="Dogs - Home">
+        <Link className="logo" to="/" aria-label="Cats - Home">
           Cats <span>.</span>
         </Link>
-        {user ? (
+        {data && data.user ? (
           <Link className="login-header" to="/conta">
-            {user.nome}
+            {data.user.name}
           </Link>
         ) : (
           <Link className="login-header" to="/login">
-            Login / Criar
+            Login 
           </Link>
         )}
       </nav>
