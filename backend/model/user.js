@@ -26,6 +26,7 @@ class UserModel {
                 allowNull: false,
                 defaultValue: 'viewer'
             },
+            
             isBlocked: {
                 type: database.db.Sequelize.BOOLEAN,
                 defaultValue: false

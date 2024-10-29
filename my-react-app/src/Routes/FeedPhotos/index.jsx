@@ -8,38 +8,39 @@ import './style.css';
 
 function FeedPhotos({ setModalPhoto }) {
   const [page, setPage] = useState(1);
-  const { data, loading, error, request } = useFetch();
+  const { loading, error, request } = useFetch();
   const [hasMore, setHasMore] = useState(true);
   const [photos, setPhotos] = useState([]);
 
-  const [apiType] = useState('cats');
+  const apiType = 'cats';
 
-  // Busca de fotos de gatos
   useEffect(() => {
-    if (apiType === 'cats') {
-      async function fetchPhotos() {
-        const total = 1; // Define o número de fotos por requisição
-        const { url, options } = GET_CATS(page, total);
-        const { response, json } = await request(url, options);
+    async function fetchPhotos() {
+      const total = 1;
+      const { url, options } = GET_CATS(page, total);
+      const { response, json } = await request(url, options);
 
-        if (response && response.ok) {
-          if (json.results.length < total) {
-            setHasMore(false);
-          }
-          setPhotos((prevPhotos) => [...prevPhotos, ...json.results]); // Atualiza o estado com as novas fotos
-        } else {
+      if (response && response.ok) {
+        if (json.results.length < total) {
           setHasMore(false);
         }
+        setPhotos((prevPhotos) => [...prevPhotos, ...json.results]);
+      } else {
+        setHasMore(false);
       }
+    }
+
+    if (apiType === 'cats') {
       fetchPhotos();
     }
   }, [page, request, apiType]);
 
-  // Scroll infinito para gatos
+  // Scroll infinito
   const handleScroll = useCallback(() => {
     if (
       apiType === 'cats' &&
-      window.innerHeight + document.documentElement.scrollTop >= document.documentElement.scrollHeight - 200 &&
+      window.innerHeight + document.documentElement.scrollTop >=
+        document.documentElement.scrollHeight - 200 &&
       hasMore &&
       !loading
     ) {
@@ -52,6 +53,20 @@ function FeedPhotos({ setModalPhoto }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
 
+  // Função para deletar uma foto
+  const handleDeletePhoto = (id) => {
+    setPhotos((prevPhotos) => prevPhotos.filter((photo) => photo.id !== id));
+  };
+
+  // Função para atualizar uma foto
+  const handleUpdatePhoto = (updatedPhoto) => {
+    setPhotos((prevPhotos) =>
+      prevPhotos.map((photo) => 
+        photo.id === updatedPhoto.id ? updatedPhoto : photo
+      )
+    );
+  };
+
   if (error) return <ErrorMsg error={error} />;
   if (loading && page === 1) return <Loading />;
 
@@ -62,6 +77,8 @@ function FeedPhotos({ setModalPhoto }) {
           <FeedPhotosItem
             photo={photo}
             key={photo.id}
+            onDelete={handleDeletePhoto}
+            onUpdate={handleUpdatePhoto} // Adicione esta linha
             setModalPhoto={setModalPhoto}
           />
         ))}

@@ -10,7 +10,7 @@ class Database {
             database: "api-cats",
             host: "localhost",
             username: "root",
-            password: "8525",
+            password: "",
             dialect: "mysql"
         })
     }

@@ -4,9 +4,9 @@ class Gatos {
   constructor() {
     this.model = database.db.define("gatos", {
       id: {
-        type: database.db.Sequelize.STRING(36), // Exemplo: UUIDs geralmente têm 36 caracteres
-        primaryKey: true,
-        allowNull: false
+        type: database.db.Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
       },
       url: {
         type: database.db.Sequelize.STRING(255), // Aumenta o tamanho para 255 caracteres
@@ -25,7 +25,7 @@ class Gatos {
         allowNull: true
       },
       temperamento: {
-        type: database.db.Sequelize.STRING(100), // Aumenta o tamanho para 100 caracteres
+        type: database.db.Sequelize.STRING(100), 
         allowNull: true
       },
       nivel_energia: {
@@ -33,7 +33,7 @@ class Gatos {
         allowNull: true
       },
       vida_media: {
-        type: database.db.Sequelize.STRING(50), // Aumenta o tamanho para 50 caracteres
+        type: database.db.Sequelize.STRING(50), 
         allowNull: true
       },
       adaptabilidade: {

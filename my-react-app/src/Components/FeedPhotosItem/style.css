@@ -19,7 +19,7 @@
 .StyledImage {
   width: 100%;
   height: 200px; /* Defina a altura desejada para as imagens */
-  object-fit: contain; /* Ajusta a imagem para se ajustar ao espaço do card sem cortar */
+  object-fit: cover; /* Ajusta a imagem para se ajustar ao espaço do card sem cortar */
 }
 
 .photo-info {
@@ -39,33 +39,70 @@
   color: #666; /* Cor do texto da descrição */
 }
 
-.visualizacao {
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  font-size: 0.9rem;
-  text-align: center;
-  display: none; /* Oculta inicialmente */
-  padding: 5px; /* Espaçamento interno */
-  border-radius: 0.2rem; /* Bordas arredondadas */
+.edit-container {
+  margin-top: 10px; /* Espaço acima dos inputs */
 }
 
-.StyledFeedPhotosItem:hover .visualizacao {
-  display: flex;
-  align-items: center;
+.edit-input {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0; /* Espaçamento entre os inputs */
+  border: 1px solid #ddd; /* Borda suave */
+  border-radius: 4px; /* Bordas arredondadas */
+  transition: border-color 0.3s; /* Transição suave */
+}
+
+.edit-input:focus {
+  border-color: #007bff; /* Cor do foco */
+  outline: none; /* Remove a borda de foco padrão */
+}
+
+.save-button {
+  padding: 10px 15px; /* Padding para o botão */
+  background-color: #28a745; /* Cor de fundo verde */
+  color: white; /* Cor do texto */
+  border: none; /* Remove borda */
+  border-radius: 4px; /* Bordas arredondadas */
+  cursor: pointer; /* Cursor de pointer */
+  transition: background-color 0.3s; /* Transição suave */
+}
+
+.save-button:hover {
+  background-color: #218838; /* Cor do botão ao passar o mouse */
+}
+
+.botoes {
   justify-content: center;
+  display: flex;
+  margin-top: 15px; /* Espaço acima dos botões */
 }
 
-.visualizacao::before {
-  content: '';
-  width: 16px;
-  height: 10px;
-  display: inline-block;
-  margin-right: 0.25rem;
-  background: url('../../Assets/visualizacao.svg') no-repeat;
+button.deletar {
+  margin: 0 0.5rem;
+  background-color: red;
+  color: white; 
+  padding: 10px 15px; /* Adiciona padding ao botão */
+  border: none; /* Remove borda padrão */
+  border-radius: 5px; /* Bordas arredondadas */
+  cursor: pointer; /* Muda o cursor ao passar */
+  transition: background-color 0.3s; /* Transição suave */
 }
 
-@media (max-width: 40rem) {
-  .StyledFeedPhotosItem {
-    grid-template-columns: 1fr; /* Em telas pequenas, faça tudo em uma coluna */
-  }
+button.deletar:hover {
+  background-color: darkred; 
+}
+
+button.editar {
+  margin: 0 0.5rem;
+  background-color: green;
+  color: white; 
+  padding: 10px 15px; /* Adiciona padding ao botão */
+  border: none; /* Remove borda padrão */
+  border-radius: 5px; /* Bordas arredondadas */
+  cursor: pointer; /* Muda o cursor ao passar */
+  transition: background-color 0.3s; /* Transição suave */
+}
+
+button.editar:hover {
+  background-color: darkgreen; 
 }
