@@ -1,8 +1,8 @@
-const API_URL = 'http://localhost:3000/api/v1/user';
+const API_URL = 'http://localhost:3000/api/v1/user/';
 
 export async function tokenValidate(token) {
   return {
-    url: API_URL + '/validate',
+    url: API_URL + 'validate',
     options: {
       method: 'POST',
       headers: {
@@ -14,7 +14,7 @@ export async function tokenValidate(token) {
 
 export async function userGet(token) {
   return {
-    url: API_URL + '/token',
+    url: API_URL + 'token',
     options: {
       method: 'GET',
       headers: {
@@ -26,7 +26,7 @@ export async function userGet(token) {
 
 export async function loginUser(body) {
   return {
-    url: API_URL + '/login',
+    url: API_URL + 'login',
     options: {
       method: 'POST',
       headers: {
@@ -37,6 +37,18 @@ export async function loginUser(body) {
   }
 }
 
+export const get_users = (token) => {
+  return {
+    url: API_URL,
+    options: {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    },
+  }
+}
 
 /*
 export async function registerUser(body) {

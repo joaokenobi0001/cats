@@ -9,23 +9,23 @@ class Gatos {
         primaryKey: true
       },
       url: {
-        type: database.db.Sequelize.STRING(255), // Aumenta o tamanho para 255 caracteres
+        type: database.db.Sequelize.STRING(255),
         allowNull: false
       },
       descricao: {
-        type: database.db.Sequelize.STRING(500), // Aumenta o tamanho para 500 caracteres
+        type: database.db.Sequelize.STRING(500),
         allowNull: true 
       },
       nome: {
-        type: database.db.Sequelize.STRING(100), // Aumenta o tamanho para 100 caracteres
+        type: database.db.Sequelize.STRING(100),
         allowNull: false
       },
       origem: {
-        type: database.db.Sequelize.STRING(100), // Aumenta o tamanho para 100 caracteres
+        type: database.db.Sequelize.STRING(100),
         allowNull: true
       },
       temperamento: {
-        type: database.db.Sequelize.STRING(100), 
+        type: database.db.Sequelize.STRING(100),
         allowNull: true
       },
       nivel_energia: {
@@ -33,7 +33,7 @@ class Gatos {
         allowNull: true
       },
       vida_media: {
-        type: database.db.Sequelize.STRING(50), 
+        type: database.db.Sequelize.STRING(50),
         allowNull: true
       },
       adaptabilidade: {

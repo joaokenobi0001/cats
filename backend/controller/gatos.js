@@ -4,7 +4,6 @@ const fetch = require('node-fetch'); // Certifique-se de instalar este pacote
 class GatosController {
     async criarGatos(data) {
         const gatoData = {
-            id: data.id,
             url: data.reference_image_id ? `https://cdn2.thecatapi.com/images/${data.reference_image_id}.jpg` : null,
             descricao: data.description || null,
             nome: data.name,
@@ -49,7 +48,7 @@ class GatosController {
                                 try {
                                     await this.criarGatos(it);
                                 } catch (error) {
-                                    console.error(`Erro ao criar gato com ID ${it.id}: ${error.message}`);
+                                    console.error(`Erro ao criar gato com ID ${it.idi}: ${error.message}`);
                                 }
                             }));
                         }

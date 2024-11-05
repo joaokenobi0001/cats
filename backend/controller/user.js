@@ -37,55 +37,32 @@ class UserController {
         return userValue;
     }
     
-    async update(id, name, email, password, requestingUser) {
-        const oldUser = await User.findByPk(id);
-    
-        if (!oldUser) {
-            throw new Error("Usuário não encontrado.");
-        }
-    
-        // Verifica se o usuário que está tentando editar é o mesmo ou um administrador
-        if (requestingUser.role !== 'admin' && requestingUser.id !== id) {
-            throw new Error("Você não tem permissão para editar este usuário.");
-        }
-    
-        // Verifica se o usuário está bloqueado
-        if (oldUser.isBlocked) {
-            throw new Error("Usuário bloqueado.");
-        }
-    
-        // Atualiza os dados do usuário
-        oldUser.name = name || oldUser.name;
-        oldUser.email = email || oldUser.email;
-    
-        if (password) {
-            oldUser.password = await bcrypt.hash(password, salts);
-        }
-    
-        await oldUser.save();
-        return oldUser;
+    async update(id) {
+        await User.findByPk(id);
     }
     
-    
-    
-    async delete(id, requestingUser) {
+    async delete(id) {
         if (id === undefined) {
             throw new Error("Id é obrigatório.");
         }
 
         const userValue = await this.findUser(id);
 
-        if (requestingUser.role !== 'admin' && requestingUser.id !== id) {
-            throw new Error("Você não tem permissão para deletar este usuário.");
-        }
-
         await userValue.destroy();
     }
 
     async findAll() {
-        return User.findAll();
-    }
-
+            try {
+                const users = await User.findAll({
+                    attributes: { exclude: ['password'] }
+                });
+                return users;
+            } catch (e) {
+                console.error('Erro ao buscar usuários:', e);
+                throw new Error('Erro ao buscar usuários');
+            }
+        }
+    
     async login(email, password) {
         if (email === undefined || password === undefined) {
             throw new Error("Email e senha são obrigatórios.");
@@ -108,24 +85,16 @@ class UserController {
         );
     }
 
-    async isAdmin(user) {
-        return user && user.role === 'admin';
-    }
-
-    async blockUser(id, requestingUser) {
-        if (!this.isAdmin(requestingUser)) {
-            throw new Error("Apenas administradores podem bloquear usuários.");
-        }
+   
+    async blockUser(id) {
+       
 
         const user = await this.findUser(id);
         user.isBlocked = true;
         await user.save();
     }
 
-    async unblockUser(id, requestingUser) {
-        if (!this.isAdmin(requestingUser)) {
-            throw new Error("Apenas administradores podem desbloquear usuários.");
-        }
+    async unblockUser(id) {
 
         const user = await User.findByPk(id);
         if (!user) {

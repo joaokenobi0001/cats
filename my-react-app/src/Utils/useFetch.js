@@ -1,30 +1,39 @@
 import { useCallback, useState } from 'react';
 
-function useFetch() {
+const useFetch = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const request = useCallback(async (url, options) => {
-    setLoading(true);
+    let response;
+    let json;
     try {
-      const response = await fetch(url, options);
-      const contentType = response.headers.get('content-type');
-      if (!response.ok || !contentType.includes('application/json')) {
-        throw new Error('Resposta inválida da API');
+      setError(null);
+      setLoading(true);
+      response = await fetch(url, options);
+      try {
+        json = await response.json();
+      } catch (jsonError) {
+        setError('Resposta da API não é JSON');
+        throw new Error('Resposta da API não é JSON');
       }
-      const json = await response.json();
       setData(json);
-      return { response, json };
-    } catch (err) {
-      setError(err.message || 'Erro desconhecido');
-      return { response: null, json: null };
+    } catch (fetchError) {
+      setError(fetchError.message);
+      console.error('Erro durante a requisição:', fetchError);
     } finally {
       setLoading(false);
+      return { response, json };
     }
   }, []);
 
-  return { data, loading, error, request };
-}
+  return {
+    data,
+    loading,
+    error,
+    request,
+  };
+};
 
 export default useFetch;

@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { fetchCatImages } from '../../api/cats'; // Função da API de gatos
+import { fetchCatImages } from '../../api/cats';
 import ErrorMsg from '../../Components/ErrorMsg';
 import FeedPhotosItem from '../../Components/FeedPhotosItemHome';
 import Loading from '../../Components/Loading';
-import useFetch from '../../Utils/useFetch'; // Hook useFetch
+import useFetch from '../../Utils/useFetch';
 import '../FeedPhotosHome/style.css';
 
 function FeedPhotos({ setModalPhoto }) {
@@ -13,8 +13,6 @@ function FeedPhotos({ setModalPhoto }) {
   const [apiType] = useState('cats'); 
 
 
-
-  // Busca de fotos de gatos
   useEffect(() => {
     if (apiType === 'cats') {
       async function fetchPhotos() {

@@ -51,15 +51,20 @@ class UserApi {
         }
     }
 
-    async getAllUser(req, res) {
-        try {
-            const user = await UserController.findAll();
-            res.send({ user });
-        } catch (e) {
-            console.error(e);
-            res.status(400).send({ error: 'Deu erro' });
+        async getAllUser(req, res) {
+            try {
+                const users = await UserController.findAll();
+                // Extrair apenas os dataValues dos usuários
+                const userList = users.map(user => user.dataValues);
+                console.log('Usuários encontrados:', userList); // Log para depuração
+                res.setHeader('Content-Type', 'application/json'); // Defina o cabeçalho Content-Type
+                res.json({ user: userList });
+            } catch (e) {
+                console.error('Erro ao buscar todos os usuários:', e);
+                res.status(400).send({ error: 'Deu erro' });
+            }
         }
-    }
+    
 
     async createUser(req, res) {
         const { name, email, password } = req.body; 

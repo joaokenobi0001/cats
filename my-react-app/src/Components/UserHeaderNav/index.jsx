@@ -38,8 +38,8 @@ function UserHeaderNav() {
         </NavLink>
         {data && data.user.role === 'admin' && ( 
           <>
-            <NavLink to="/conta/estatisticas">
-              <img src="/src/Assets/estatisticas.svg" alt="Usuários" />
+            <NavLink to="/conta/usuarios">
+              <img src="/src/Assets/usuarios.svg" alt="Usuários" />
               {mobile && 'Usuários'}
             </NavLink>
             <NavLink to="/conta/postar">

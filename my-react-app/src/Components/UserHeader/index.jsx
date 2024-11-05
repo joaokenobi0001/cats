@@ -18,7 +18,7 @@ function UserHeader() {
       case '/conta/postar':
         setTitle(data.user.role === 'admin' ? 'Postar' : 'My cats');
         break;
-      case '/conta/estatisticas':
+      case '/conta/usuarios':
         setTitle(data.user.role === 'admin' ? 'Usuários' : 'My cats');
         break;
       default:

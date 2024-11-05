@@ -1,5 +1,5 @@
 const express = require('express');
-const cors = require('cors'); // Importa o pacote cors
+const cors = require('cors'); 
 const userRouter = require('./routes/user');
 
 const database = require('./config/database');
@@ -7,7 +7,7 @@ const  gatosRouter = require('./routes/gatos');
 
 const app = express();
 app.use(express.json());
-app.use(cors()); // Habilita CORS para todas as rotas
+app.use(cors()); 
 
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/gatos", gatosRouter);
