@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Image from '../Image';
 import { DELETE_POSTAGEM, EDITAR_POSTAGEM } from '../../api/cats';
+import Image from '../Image';
 import './style.css';
 
 function FeedPhotosItem({ photo, onDelete, onUpdate, setModalPhoto }) {

@@ -17,6 +17,8 @@
   border: 1px solid transparent;
   transition: .1s;
   cursor: pointer;
+  text-decoration: none;
+  color: black;
 }
 
 .StyledHeaderUserNav a:hover,

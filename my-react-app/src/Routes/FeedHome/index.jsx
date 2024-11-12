@@ -8,7 +8,7 @@ function FeedHome() {
 
   function handleInfiniteScroll(isInfinite) {
     if (isInfinite) {
-      setPage((prevPage) => prevPage + 1);
+      setPage((prevPage) => prevPage + 10);
       setInfinite(false);
     }
   }

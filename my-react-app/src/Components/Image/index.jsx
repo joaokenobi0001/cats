@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import './style.css'; // Certifique-se de que este caminho está correto
+import './style.css';
 
-function Image({ alt, ...props }) {
+function Image({ alt, src }) {
   const [skeleton, setSkeleton] = useState(true);
 
   function handleLoad({ target }) {
@@ -10,9 +10,8 @@ function Image({ alt, ...props }) {
   }
 
   return (
-    <div className="StyledImage">
-      {skeleton && <div className="skeleton"></div>}
-      <img {...props} className='img' alt={alt} onLoad={handleLoad} />
+    <div className="StyleCard">
+        <img src={src} className="img" alt={alt} onLoad={handleLoad} />
     </div>
   );
 }
