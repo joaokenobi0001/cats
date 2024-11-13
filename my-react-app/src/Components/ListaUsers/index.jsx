@@ -36,12 +36,6 @@ function ListaUsers({ data }) {
     setShowModal('delete'); // Mostrar o modal de exclusão
   };
 
-  const handleExcluirUser = (user) => {
-    console.log('Excluir usuário', user);
-    // Lógica de exclusão aqui
-    handleClose(); // Fechar o modal após excluir
-  };
-
   const handleBloquearUser = (user) => {
     console.log('Bloquear usuário', user);
     // Lógica de bloqueio aqui

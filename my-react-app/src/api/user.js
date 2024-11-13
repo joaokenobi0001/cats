@@ -50,47 +50,55 @@ export const get_users = (token) => {
   }
 }
 
-/*
-export async function registerUser(body) {
-  try {
-    return {
-      url: API_URL + '/admin',
-      options: {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
+export const bloq_users = (token) => {
+  return {
+    url: API_URL + 'bloq',
+    options: {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
       },
-    }
-  } catch (error) {
-    console.error('Erro ao cadastrar:', error.response ? error.response.data : error);
-    throw new Error('Erro ao cadastrar. Tente novamente.');
+    },
   }
 }
 
-
-export async function bloquearUser(id, requestingUser) {
-  try {
-    const response = await axios.post(API_URL + `/${id}/block`, {
-      requestingUser,
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Erro ao bloquear usuário:', error.response ? error.response.data : error);
-    throw new Error('Erro ao bloquear usuário. Tente novamente.');
+export const add_users = (token) => {
+  return {
+    url: API_URL + 'add',
+    options: {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    },
   }
 }
 
-export async function desbloquearUser(id, requestingUser) {
-  try {
-    const response = await axios.post(API_URL + `/${id}/unblock`, {
-      requestingUser,
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Erro ao desbloquear usuário:', error.response ? error.response.data : error);
-    throw new Error('Erro ao desbloquear usuário. Tente novamente.');
+export const up_users = (token) => {
+  return {
+    url: API_URL + 'up',
+    options: {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    },
   }
 }
-*/
+
+export const delete_users = (token) => {
+  return {
+    url: API_URL + 'delete',
+    options: {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    },
+  }
+}
+
