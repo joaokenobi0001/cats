@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import './style.css';
 
-function EditarUser({ user, show, handleClose }) {
+function EditarUser({ user, show, handleClose, handleUpdateUser }) {
   if (!user) return null; // Verifica se há um usuário para editar.
 
   const [name, setName] = useState(user.name);
@@ -11,8 +11,7 @@ function EditarUser({ user, show, handleClose }) {
 
   const handleSave = () => {
     const updatedUser = { ...user, name, email, role };
-    console.log('Salvar usuário', updatedUser);
-    // Implementação de salvar alterações no usuário
+    handleUpdateUser(updatedUser); // Passa o usuário atualizado para a função
     handleClose(); // Fecha o modal após salvar
   };
 
@@ -65,6 +64,7 @@ EditarUser.propTypes = {
   user: PropTypes.object,
   show: PropTypes.bool,
   handleClose: PropTypes.func.isRequired,
+  handleUpdateUser: PropTypes.func.isRequired, // Função para atualizar o usuário
 };
 
 export default EditarUser;

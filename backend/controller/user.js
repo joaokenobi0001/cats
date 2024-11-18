@@ -2,6 +2,10 @@ const User = require("../model/user");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const salts = 12;
+const sgMail = require('@sendgrid/mail');
+const AccessCode = require("../model/acessCode"); 
+require('dotenv').config();
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 class UserController {
     async createUser(name, email, password, role) {
@@ -62,7 +66,40 @@ class UserController {
                 throw new Error('Erro ao buscar usuários');
             }
         }
-    
+
+        async findUm(email) {
+            try {
+              const user = await User.findOne({
+                where: { email },
+                attributes: ['id'], // Apenas retorna o ID do usuário
+              });
+        
+              if (!user) {
+                throw new Error('Usuário não encontrado');
+              }
+        
+              return user.id; // Retorna apenas o ID
+            } catch (error) {
+              console.error('Erro ao buscar ID do usuário:', error);
+              throw new Error('Erro ao buscar usuário');
+            }
+          }
+        
+        async updateSenha(id, hashedPassword) {
+            try {
+              const user = await User.findByPk(id);
+              if (!user) {
+                throw new Error('Usuário não encontrado');
+              }
+              await user.update({ password: hashedPassword });
+              return user;
+            } catch (error) {
+              console.error('Erro ao atualizar senha:', error);
+              throw new Error('Erro ao atualizar senha');
+            }
+          }
+        
+
     async login(email, password) {
         if (email === undefined || password === undefined) {
             throw new Error("Email e senha são obrigatórios.");
@@ -85,10 +122,7 @@ class UserController {
         );
     }
 
-   
     async blockUser(id) {
-       
-
         const user = await this.findUser(id);
         user.isBlocked = true;
         await user.save();
@@ -104,6 +138,53 @@ class UserController {
         user.isBlocked = false;
         await user.save();
     }
-}
+
+    
+    async recuperarSenha(email) {
+        const user = await User.findOne({ where: { email } });
+        if (!user) throw new Error('Email inválido.');
+        return { user };
+    }
+
+    async sendAccessCode(email, codigoAcesso) {
+        if (!email) throw new Error('O email é obrigatório.');
+    
+        const msg = {
+            to: email, // E-mail do destinatário
+            from: 'eduardohansen10@gmail.com', // Use um e-mail válido (melhor, do domínio autorizado no SendGrid)
+            subject: 'Seu Código de Acesso',
+            text: `Seu código de acesso é: ${codigoAcesso}`,
+            html: `<strong>Seu código de acesso é: ${codigoAcesso}</strong>`,
+        };
+    
+        try {
+            await sgMail.send(msg);
+            console.log(`E-mail enviado para: ${email}`);
+        } catch (error) {
+            console.error(`Erro ao enviar e-mail: ${error.message}`);
+            throw new Error('Falha ao enviar o e-mail.');
+        }
+    }
+
+    async storeAccessCode(userId, codigoAcesso) {
+        const expiration = new Date();
+        expiration.setMinutes(expiration.getMinutes() + 10); // Código válido por 10 minutos
+
+        await AccessCode.create({
+            userId,
+            codigoAcesso,
+            expiresAt: expiration,
+        });
+    }
+
+    async validateAccessCode(userId, codigoAcesso) {
+            const accessCode = await AccessCode.findOne({ where: { userId, codigoAcesso } });
+            if (!accessCode) throw new Error('Código inválido.');
+
+            if (new Date() > accessCode.expiresAt) throw new Error('Código expirado.');
+
+            return accessCode;
+        }
+    }
 
 module.exports = new UserController();

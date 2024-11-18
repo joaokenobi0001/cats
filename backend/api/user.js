@@ -1,5 +1,8 @@
 const jwt = require('jsonwebtoken');
 const UserController = require('../controller/user');
+require('dotenv').config();
+const bcrypt = require('bcrypt');
+
 
 class UserApi {
     async tokenValidate(req, res) {
@@ -95,10 +98,9 @@ class UserApi {
     async updateUser(req, res) {
         const { id } = req.params;
         const { name, email, password } = req.body;
-        const requestingUser = req.user;
 
         try {
-            const user = await UserController.update(Number(id), name, email, password, requestingUser);
+            const user = await UserController.update(Number(id), name, email, password);
             return res.status(200).send(user);
         } catch (e) {
             console.error(e);
@@ -159,6 +161,72 @@ class UserApi {
     }
 
     
+    async recuperarSenha(req, res) {
+        const { email } = req.body;
+        if (!email) return res.status(400).json({ error: 'Email é obrigatório.' });
+
+        try {
+            // Verificar se o usuário existe
+            const { user } = await UserController.recuperarSenha(email);
+
+            // Gerar código de acesso
+            const codigoAcesso = Math.floor(100000 + Math.random() * 900000).toString();
+
+            // Armazenar o código no banco de dados
+            await UserController.storeAccessCode(user.id, codigoAcesso);
+
+            // Enviar o código para o email do usuário
+            await UserController.sendAccessCode(email, codigoAcesso);
+
+            res.status(200).json({ message: 'Código enviado com sucesso.' });
+        } catch (e) {
+            res.status(400).json({ error: e.message });
+        }
+    }
+
+    async validateAccessCode(req, res) {
+        const { userId, codigoAcesso } = req.body;
+        if (!userId || !codigoAcesso) {
+            return res.status(400).json({ error: 'Campos obrigatórios ausentes.' });
+        }
+
+        try {
+            const accessCode = await UserController.validateAccessCode(Number(userId), codigoAcesso);
+            res.status(200).json({ message: 'Código válido.', accessCode });
+        } catch (e) {
+            res.status(400).json({ error: e.message });
+        }
+    }
+
+
+    async atualizarSenha(req, res) {
+        const { email, newPassword } = req.body;
+    
+        // Verificar se email e nova senha foram enviados
+        if (!email || !newPassword) {
+          return res.status(400).json({ error: 'Email e nova senha são obrigatórios' });
+        }
+    
+        try {
+          // Buscar o ID do usuário pelo email
+          const userId = await UserController.findUm(email);
+    
+          if (!userId) {
+            return res.status(404).json({ error: 'Usuário não encontrado' });
+          }
+    
+          // Criptografar a nova senha
+          const hashedPassword = await bcrypt.hash(newPassword, 10);
+    
+          // Atualizar a senha usando o ID
+          await UserController.updateSenha(userId, hashedPassword);
+    
+          return res.status(200).json({ message: 'Senha atualizada com sucesso' });
+        } catch (error) {
+          console.error('Erro ao atualizar senha:', error);
+          return res.status(500).json({ error: 'Erro interno do servidor' });
+        }
+      }
 }
 
 module.exports = new UserApi();
