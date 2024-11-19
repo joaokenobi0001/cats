@@ -50,9 +50,9 @@ export const get_users = (token) => {
   }
 }
 
-export const bloq_users = (token) => {
+export const bloq_users = (token, id) => {
   return {
-    url: API_URL + 'bloq',
+    url: `${API_URL}${id}/block`, 
     options: {
       method: 'POST',
       headers: {
@@ -60,12 +60,12 @@ export const bloq_users = (token) => {
         'Content-Type': 'application/json',
       },
     },
-  }
-}
+  };
+};
 
-export const add_users = (token) => {
+export const desbloq_users = (token, id) => {
   return {
-    url: API_URL + 'add',
+    url: `${API_URL}${id}/unblock`, 
     options: {
       method: 'POST',
       headers: {
@@ -73,12 +73,43 @@ export const add_users = (token) => {
         'Content-Type': 'application/json',
       },
     },
-  }
-}
+  };
+};
 
-export const up_users = (token) => {
+
+export const add_admin = (token, userData) => {
   return {
-    url: API_URL + 'up',
+    url: `${API_URL}admin`,  // Ajuste a URL conforme necessário (caso precise adicionar o ID ou outro dado)
+    options: {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),  // Passando os dados do usuário (como id, nome, email, etc.)
+    },
+  };
+};
+
+
+export const add_view = (token, userData) => {
+  return {
+    url: `${API_URL}`,  
+    options: {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),  // Passando os dados do usuário (como id, nome, email, etc.)
+    },
+  };
+};
+
+
+export const edit_users = (token, id) => {
+  return {
+    url: `${API_URL}${id}`,
     options: {
       method: 'PUT',
       headers: {
@@ -89,9 +120,9 @@ export const up_users = (token) => {
   }
 }
 
-export const delete_users = (token) => {
+export const delete_users = (token, id) => {
   return {
-    url: API_URL + 'delete',
+    url: `${API_URL}${id}`,
     options: {
       method: 'DELETE',
       headers: {
@@ -102,3 +133,41 @@ export const delete_users = (token) => {
   }
 }
 
+export const recuperar_senha = (body) => {
+  return {
+    url: `${API_URL}recuperar`,
+    options: {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body)
+    },
+  }
+}
+
+export const verificar_senha = (body) => {
+  return {
+    url: `${API_URL}verificar`,
+    options: {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body)
+    },
+  }
+}
+
+export const atualizar_senha = (body) => {
+  return {
+    url: `${API_URL}atualizarsenha`,
+    options: {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body)
+    },
+  }
+}

@@ -49,6 +49,7 @@
   }
   
   .modal-input {
+    width: 100%;
     padding: 12px;
     font-size: 16px;
     border: 1px solid #ccc;
@@ -72,7 +73,7 @@
   }
   
   .btn-cancel-editar, .btn-save-editar {
-    background-color: #28a745;
+    width: 100%;
     padding: 12px 24px;
     border-radius: 8px;
     font-size: 16px;
@@ -82,11 +83,18 @@
   }
   
   .btn-cancel-editar {
-    background-color: #6c757d;
-    color: white;
+    color: black;
+    width: 100%; /* Ocupa toda a largura */
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
   }
   
   .btn-cancel-editar:hover {
+    color: #ffffff;
     background-color: #5a6268;
     transform: translateY(-2px); /* Animação de botão */
   }
@@ -98,7 +106,6 @@
   
   .btn-save-editar:hover {
     background-color: #218838; /* Verde mais escuro */
-    transform: translateY(-2px); /* Animação de botão */
   }
   
   @keyframes fadeIn {

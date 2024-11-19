@@ -44,6 +44,7 @@ p {
 }
 
 button {
+    border: none;
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
@@ -55,17 +56,12 @@ button:hover {
     opacity: 0.8;
 }
 
-button[type="button"] {
-    background-color: #6c757d;
+button.bloquear {
+    background-color: #dc3545;
     color: white;
 }
-
-button[type="button"]:hover {
-    background-color: #5a6268;
-}
-
-button.delete {
-    background-color: #dc3545;
+button.desbloquear {
+    background-color: #28a745;
     color: white;
 }
 
@@ -90,3 +86,20 @@ button.delete:hover {
     flex-direction: column;
     gap: 10px;
 }
+
+.cancel-bloq {
+    color: black;
+    width: 100%; /* Ocupa toda a largura */
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .cancel-bloq:hover {
+    color: #ffffff;
+    background-color: #5a6268;
+    transform: translateY(-2px); /* Animação de botão */
+  }

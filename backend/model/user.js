@@ -30,7 +30,12 @@ class UserModel {
             isBlocked: {
                 type: database.db.Sequelize.BOOLEAN,
                 defaultValue: false
-            }
+            },
+        },
+            {
+                timestamps: true, 
+                tableName: 'users', 
+            
         });
     }
 

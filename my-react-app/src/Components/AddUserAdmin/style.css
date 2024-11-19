@@ -1,0 +1,77 @@
+/* Estilo do modal de fundo */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Cor de fundo com opacidade */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Garante que o modal fique acima de outros conteúdos */
+    visibility: visible; /* Garante que o modal fique visível */
+    opacity: 1;
+    transition: opacity 0.3s ease; /* Animação suave para aparecer */
+  }
+  
+  /* Esconde o modal quando o show for falso */
+  .modal.hidden {
+    visibility: hidden;
+    opacity: 0;
+  }
+  
+  /* Estilo do conteúdo do modal */
+  .modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  /* Estilo do botão de fechar */
+  .close-btn {
+      color: black;
+      width: 100%; /* Ocupa toda a largura */
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .close-btn:hover {
+    color: #d9534f; /* Cor de destaque para o botão de fechar */
+  }
+  
+  /* Estilo do campo de entrada */
+  input {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px; /* Borda mais arredondada */
+      outline: none;
+      transition: border-color 0.3s ease;
+  }
+  
+  /* Estilo do botão de adicionar */
+  .add-btn {
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .add-btn:hover {
+    background-color: #4cae4c;
+  }
+  
