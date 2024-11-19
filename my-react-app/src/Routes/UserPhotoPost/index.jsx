@@ -52,8 +52,8 @@ function UserPhotoPost() {
     <section className="StyledUserPhotoPost animeLeft">
       <form onSubmit={handleSubmit}>
         <Input label="Nome" type="text" name="nome" {...nome} />
-        <Input label="Peso" type="number" name="peso" {...peso} />
-        <Input label="Idade" type="number" name="idade" {...idade} />
+        <Input label="Descrição" type="number" name="peso" {...peso} />
+        <Input label="Origem" type="number" name="idade" {...idade} />
         <input type="file" name="img" id="img" onChange={handleImgChange} />
         {loading ? (
           <Button content="Carregando" disabled />

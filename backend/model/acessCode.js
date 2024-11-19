@@ -13,7 +13,7 @@ class AccessCodeModel {
                 type: database.db.Sequelize.INTEGER,
                 allowNull: false,
                 references: {
-                    model: User, // Referência ao modelo User
+                    model: User, 
                     key: 'id',
                 },
             },
@@ -26,11 +26,11 @@ class AccessCodeModel {
                 allowNull: false,
             },
         }, {
-            timestamps: true, // Adiciona createdAt e updatedAt
-            tableName: 'access_codes', // Define o nome da tabela
+            timestamps: true, 
+            tableName: 'access_codes', 
         });
 
-        // Definindo a associação
+        
         this.model.belongsTo(User, { foreignKey: 'userId', as: 'user' });
     }
 }

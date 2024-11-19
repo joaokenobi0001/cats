@@ -24,7 +24,7 @@ class UserController {
         return userValue;
     }
 
-    async findUser(id) {
+    async findUser(id, isDelete = false) {
         if (id === undefined) {
             throw new Error("Id é obrigatório.");
         }
@@ -34,7 +34,7 @@ class UserController {
             throw new Error("Usuário não encontrado.");
         }
     
-        if (userValue.isBlocked) {
+        if (!isDelete  && userValue.isBlocked) {
             throw new Error("Usuário bloqueado.");
         }
     
@@ -50,7 +50,7 @@ class UserController {
             throw new Error("Id é obrigatório.");
         }
 
-        const userValue = await this.findUser(id);
+        const userValue = await this.findUser(id, true);
 
         await userValue.destroy();
     }

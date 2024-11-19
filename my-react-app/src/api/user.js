@@ -50,9 +50,9 @@ export const get_users = (token) => {
   }
 }
 
-export const bloq_users = (token) => {
+export const bloq_users = (token, id) => {
   return {
-    url: `${API_URL}/${id}/block`,
+    url: `${API_URL}${id}/block`, 
     options: {
       method: 'POST',
       headers: {
@@ -60,12 +60,12 @@ export const bloq_users = (token) => {
         'Content-Type': 'application/json',
       },
     },
-  }
-}
+  };
+};
 
-export const desbloq_users = (token) => {
+export const desbloq_users = (token, id) => {
   return {
-    url: `${API_URL}/${id}/unblock`,
+    url: `${API_URL}${id}/unblock`, 
     options: {
       method: 'POST',
       headers: {
@@ -73,34 +73,39 @@ export const desbloq_users = (token) => {
         'Content-Type': 'application/json',
       },
     },
-  }
-}
+  };
+};
 
-export const add_admin = (token) => {
-  return {
-    url: API_URL + 'admin',
-    options: {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    },
-  }
-}
 
-export const add_view = (token) => {
+export const add_admin = (token, userData) => {
   return {
-    url: API_URL,
+    url: `${API_URL}admin`,  // Ajuste a URL conforme necessário (caso precise adicionar o ID ou outro dado)
     options: {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify(userData),  // Passando os dados do usuário (como id, nome, email, etc.)
     },
-  }
-}
+  };
+};
+
+
+export const add_view = (token, userData) => {
+  return {
+    url: `${API_URL}`,  
+    options: {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),  // Passando os dados do usuário (como id, nome, email, etc.)
+    },
+  };
+};
+
 
 export const edit_users = (token, id) => {
   return {
@@ -117,7 +122,7 @@ export const edit_users = (token, id) => {
 
 export const delete_users = (token, id) => {
   return {
-    url: `${API_URL}/${id}`,
+    url: `${API_URL}${id}`,
     options: {
       method: 'DELETE',
       headers: {

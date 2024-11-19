@@ -227,3 +227,26 @@
   color: black;
  
 }
+
+.botoes {
+  display: flex;
+  justify-content: space-between; /* Botões nas extremidades esquerda e direita */
+  align-items: center;
+  padding: 10px;
+  width: 100%; /* Garante que ocupe toda a largura do container */
+}
+
+.StyledAdd,
+.StyledExp {
+  font-size: 1rem;
+  font-family: var(--type-first);
+  cursor: pointer;
+  border: none;
+  border-radius: 0.4rem;
+  background-color: black;
+  color: #fff;
+  padding: 0.8rem 1.2rem;
+  box-sizing: border-box;
+  transition: all 0.1s;
+  min-width: 8rem;
+}

@@ -15,7 +15,7 @@ app.use("/api/v1/gatos", gatosRouter);
 
 
 database.db
-    .sync({ force: true })
+    .sync({ force: false })
     .then((_) => {
         app.listen(3000, () => {
             console.info('Servidor rodando na porta 3000');
