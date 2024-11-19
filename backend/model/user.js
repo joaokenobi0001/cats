@@ -1,4 +1,4 @@
-const database = require('../config/database')
+const database = require('../config/database');
 
 class UserModel {
     constructor() {
@@ -23,9 +23,24 @@ class UserModel {
             },
             role: {
                 type: database.db.Sequelize.ENUM('admin', 'viewer'),
-                allowNull: false
-            }
-        })
+                allowNull: false,
+                defaultValue: 'viewer'
+            },
+            
+            isBlocked: {
+                type: database.db.Sequelize.BOOLEAN,
+                defaultValue: false
+            },
+        },
+            {
+                timestamps: true, 
+                tableName: 'users', 
+            
+        });
+    }
+
+    async sync() {
+        await this.model.sync();
     }
 }
 

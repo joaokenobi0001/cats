@@ -1,33 +1,50 @@
+.StyledFeedPhotosItem {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  cursor: pointer;
+  margin: 1rem;
+  border: none;
+  background-color: #f9f9f9;
+  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.StyledFeedPhotosItem:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
 .StyledImage {
-  position: relative; /* Para permitir que o esqueleto e a imagem se sobreponham */
+  background-color: black;
+  width: 300px;
+  height: 300px;
 }
 
 .img {
   display: block;
   max-width: 100%;
-  width: 100%; /* Garante que a imagem ocupe 100% do container */
-  height: auto; /* Mantém a proporção da imagem */
-  opacity: 0; /* Inicialmente invisível */
-  transition: opacity 0.2s ease-in-out; /* Transição suave para a opacidade */
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
 }
 
 .skeleton {
-  position: absolute; /* Para cobrir a imagem */
+  display: flex;
+  background-color: #e0e0e0;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: linear-gradient(90deg, #eee 0px, #fff 50%, #eee 100%);
-  background-color: #eee;
-  background-size: 200%;
-  animation: skeleton 1.5s infinite linear;
 }
 
-@keyframes skeleton {
-  from {
-    background-position: 0px;
-  }
-  to {
-    background-position: -200px;
-  }
+.StyleCard{
+  width: 300px;
+  height: 300px;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
 }

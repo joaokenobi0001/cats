@@ -1,53 +1,46 @@
 import React, { useEffect, useState } from 'react';
-import { VictoryBar, VictoryChart, VictoryPie } from 'victory';
-import './style.css'; // Importa o CSS
+import { VictoryPie } from 'victory';
+import './style.css';
 
 function UserStatsGraphs({ data }) {
-  const [graph, setGraph] = useState([]);
-  const [total, setTotal] = useState(0);
+  const [adminCount, setAdminCount] = useState(0);
+  const [viewerCount, setViewerCount] = useState(0);
 
   useEffect(() => {
-    const graphData = data.map((item) => {
-      return {
-        x: item.title,
-        y: Number(item.acessos),
-      }
-    });
+    const admins = data.filter(user => user.role === 'admin').length;
+    const viewers = data.filter(user => user.role === 'viewer').length;
 
-    setTotal(
-      data.map(({ acessos }) => Number(acessos)).reduce((a, b) => a + b, 0),
-    );
-
-    setGraph(graphData);
+    setAdminCount(admins);
+    setViewerCount(viewers);
   }, [data]);
+
+  const graphData = [
+    { x: 'Admin', y: adminCount },
+    { x: 'Viewer', y: viewerCount },
+  ];
 
   return (
     <section className="StyledUserStatsGraphs">
       <div className="total graph-item">
-        <p>Acessos: {total}</p>
+        <p>Total de Usuários: {adminCount + viewerCount}</p>
       </div>
       <div className="graph-item">
         <VictoryPie
-          data={graph}
+          data={graphData}
           innerRadius={50}
           padding={{ top: 20, bottom: 20, left: 80, right: 80 }}
           style={{
             data: {
-              fillOpacity: .9,
+              fillOpacity: 0.9,
               stroke: '#fff',
-              strokeWidth: 2
+              strokeWidth: 2,
             },
             labels: {
               fontSize: 14,
-              fill: '#333'
-            }
+              fill: '#333',
+            },
           }}
         />
-      </div>
-      <div className="graph-item">
-        <VictoryChart>
-          <VictoryBar alignment='start' data={graph} />
-        </VictoryChart>
       </div>
     </section>
   );

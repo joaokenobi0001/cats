@@ -12,16 +12,17 @@ class GatosApi {
 
     async listarGatos(req, res) {
         try {
-            const gatos = await GatosController.obterGatos();
+            const page = req.query.page || 1;
+            const gatos = await GatosController.obterGatos(page);
             return res.status(200).send(gatos);
         } catch (e) {
+            console.error('Erro ao listar gatos:', e);
             return res.status(400).send({ error: 'Erro ao listar gatos' });
         }
     }
 
     async obterGato(req, res) {
         const { id } = req.params;
-
         try {
             const gato = await GatosController.obterGatoPorId(id);
             return res.status(200).send(gato);
@@ -32,7 +33,6 @@ class GatosApi {
 
     async alterarGatos(req, res) {
         const { id } = req.params;
-
         try {
             const [updated] = await GatosController.atualizarGatos(id, req.body);
             if (!updated) {
@@ -47,7 +47,6 @@ class GatosApi {
 
     async deletarGatos(req, res) {
         const { id } = req.params;
-
         try {
             const deleted = await GatosController.deletarGatos(id);
             if (!deleted) {

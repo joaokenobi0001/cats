@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
 import QRCode from 'qrcode';
+import React, { useEffect, useRef, useState } from 'react';
 import Pix from '../../Utils/pix';
 import './style.css';
 
@@ -7,7 +7,7 @@ function Ajude() {
     const qrCodeRef = useRef(null);
     const [qrCodeValue, setQrCodeValue] = useState('');
     const [pixKey, setPixKey] = useState('47991518118');
-    const [amount, setAmount] = useState(1234.56);
+    const [amount, setAmount] = useState(1.00);
 
     useEffect(() => {
         const pix = new Pix(

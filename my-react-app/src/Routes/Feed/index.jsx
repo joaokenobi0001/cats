@@ -9,7 +9,7 @@ function Feed() {
   function handleInfiniteScroll(isInfinite) {
     if (isInfinite) {
       setPage((prevPage) => prevPage + 1);
-      setInfinite(false); // Previne chamadas contínuas até que as novas imagens sejam carregadas
+      setInfinite(false);
     }
   }
 

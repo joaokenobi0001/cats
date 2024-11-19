@@ -1,65 +1,59 @@
 const Gatos = require('../model/gatos'); // Ajuste o caminho conforme necessário
+const fetch = require('node-fetch'); // Certifique-se de instalar este pacote
 
 class GatosController {
-        async criarGatos(data) {
-            const gatoData = {
-                id: data.id,
-                descricao: data.descricao || null, 
-                url: data.url
-            };
-    
-            return await Gatos.create(gatoData);
-        }
+    async criarGatos(data) {
+        const gatoData = {
+            url: data.reference_image_id ? `https://cdn2.thecatapi.com/images/${data.reference_image_id}.jpg` : null,
+            descricao: data.description || null,
+            nome: data.name,
+            origem: data.origin,
+            temperamento: data.temperament,
+            nivel_energia: data.energy_level,
+            vida_media: data.life_span,
+            adaptabilidade: data.adaptability,
+            inteligencia: data.intelligence,
+        };
+
+        return await Gatos.create(gatoData);
+    }
 
     async obterGatos(page = 1) {
         try {
             page = Number(page);
-            if (isNaN(page) || page < 1) {
-                page = 1; // Valor padrão
-            }
-
-            const limit = 20; // Limite de resultados por página
+            const limit = 20;
             const offset = (page - 1) * limit;
 
             const { count, rows: gatosValue } = await Gatos.findAndCountAll({ limit, offset });
 
-            console.log(`Total de gatos encontrados na base de dados: ${count}`);
-
             if (page === 1 && count === 0) {
-                console.log('Nenhum gato encontrado, iniciando busca na API externa...');
-                
                 let hasMore = true;
-                const requestOptions = {
-                    method: 'GET',
-                    redirect: 'follow'
-                };
 
-                // Buscando até 10 páginas
-                for (let apiPage = 1; apiPage <= 10 && hasMore; apiPage++) {
+                for (let apiPage = 0; apiPage < 10 && hasMore; apiPage++) {
                     try {
-                        const response = await fetch(`https://api.thecatapi.com/v1/images/search?limit=10&page=${apiPage}`, requestOptions);
+                        const response = await fetch(`https://api.thecatapi.com/v1/breeds?limit=10&page=${apiPage}`, {
+                            headers: { 'x-api-key': 'live_TYg5Pa0i05R325DY2jXhp98R9aCVOtu1js8OlTruHZdnvRDXPam0eqVJMVEJ1GY3' }
+                        });
 
                         if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
+                            throw new Error(`Erro na API externa: ${response.status}`);
                         }
 
                         const data = await response.json();
-                        console.log(`Página ${apiPage} recebida, total de resultados: ${data.length}`);
 
                         if (data.length === 0) {
                             hasMore = false;
                         } else {
-                            // Criação dos gatos
                             await Promise.all(data.map(async (it) => {
                                 try {
                                     await this.criarGatos(it);
                                 } catch (error) {
-                                    console.error(`Erro ao criar gato com ID ${it.id}: ${error.message}`);
+                                    console.error(`Erro ao criar gato com ID ${it.idi}: ${error.message}`);
                                 }
                             }));
                         }
                     } catch (error) {
-                        console.error(`Erro durante a busca na API: ${error.message}`);
+                        console.error(`Erro ao buscar na API: ${error.message}`);
                         hasMore = false;
                     }
                 }
@@ -79,33 +73,34 @@ class GatosController {
         const pages = Math.ceil(count / limit);
         return {
             info: {
-                count: count,
-                pages: pages,
+                count,
+                pages,
                 next: page < pages ? `http://localhost:3000/api/v1/gatos/?page=${page + 1}` : null,
                 prev: page > 1 ? `http://localhost:3000/api/v1/gatos/?page=${page - 1}` : null,
             },
-            results: gatosValue
+            results: gatosValue,
         };
     }
 
     async obterGatoPorId(id) {
-    
         const gato = await Gatos.findByPk(id);
-        
-  
         if (!gato) {
             throw new Error('Gato não encontrado');
         }
-    
+
         return {
             id: gato.id,
-            descricao: gato.descricao,
             url: gato.url,
-
+            descricao: gato.descricao,
+            nome: gato.nome,
+            origem: gato.origem,
+            temperamento: gato.temperamento,
+            nivel_energia: gato.nivel_energia,
+            vida_media: gato.vida_media,
+            adaptabilidade: gato.adaptabilidade,
+            inteligencia: gato.inteligencia,
         };
     }
-    
-    
 
     async atualizarGatos(id, data) {
         return await Gatos.update(data, { where: { id } });

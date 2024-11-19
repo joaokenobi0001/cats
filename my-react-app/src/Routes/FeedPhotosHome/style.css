@@ -1,0 +1,25 @@
+.feed-photos-list-home {
+  display: grid;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.feed-photos-row {
+  display: flex;
+  justify-content: space-around; 
+}
+
+@media (max-width: 1024px) {
+  .feed-photos-row {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .feed-photos-row {
+    flex-direction: column;
+  }
+}

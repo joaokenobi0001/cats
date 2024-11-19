@@ -1,0 +1,252 @@
+/* Variáveis globais para cores e tipografia */
+:root {
+  --primary-color: black;         /* Cor principal */
+  --secondary-color: #ffffff;       /* Cor de hover */
+  --background-color: #f9f9f9;      /* Cor de fundo das seções */
+  --light-gray: #f0f0f0;            /* Cor de fundo das células da tabela */
+  --dark-gray: #333333;             /* Cor para textos */
+  --medium-gray: #555555;           /* Cor secundária para textos */
+  --highlight-color: #d1e7dd;       /* Cor para destaque de linhas */
+  --button-radius: 8px;             /* Bordas arredondadas para botões */
+  --input-radius: 4px;              /* Bordas arredondadas para inputs */
+  --font-size-base: 1rem;           /* Tamanho base de fonte */
+  --font-size-large: 1.25rem;       /* Tamanho maior para títulos */
+  --font-size-small: 0.875rem;      /* Tamanho pequeno para telas pequenas */
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra para destacar */
+}
+
+/* Estilos gerais da lista */
+.StyledListaUsers {
+  margin: 20px auto;
+  padding: 20px;
+  background-color: var(--background-color);
+  border-radius: 12px;
+  box-shadow: var(--box-shadow);
+  max-width: 1200px;
+  width: 100%;
+}
+
+/* Título */
+.StyledListaUsers h2 {
+  font-size: var(--font-size-large);
+  font-weight: 600;
+  color: var(--dark-gray);
+  margin-bottom: 20px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* Estilos para a div dos inputs (card) */
+.search-form-wrapper {
+  background-color: white; /* Fundo branco para o "card" */
+  padding: 20px;
+  border-radius: 12px; /* Bordas arredondadas */
+  box-shadow: var(--box-shadow); /* Sombras para dar profundidade */
+  margin-bottom: 25px; /* Espaço abaixo do card */
+}
+
+.search-form {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  transition: all 0.3s ease;
+}
+
+.search-form input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: var(--input-radius);
+  font-size: var(--font-size-base);
+  flex: 1;
+  min-width: 180px;
+  transition: border-color 0.3s ease;
+}
+
+.search-form input:focus {
+  outline: none;
+  border-color: var(--primary-color); /* Cor de destaque ao focar no campo */
+}
+
+.search-form button {
+  padding: 10px 20px;
+  border: none;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: var(--button-radius);
+  font-size: var(--font-size-base);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.search-form button:hover {
+  color: black;
+  background-color: var(--secondary-color);
+  transform: translateY(-2px); /* Efeito de levitação */
+}
+
+/* Estilos da tabela */
+.StyledListaUsers table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border-radius: 8px;
+}
+
+.StyledListaUsers th {
+  padding: 12px 15px;
+ 
+  font-weight: bold;
+  color: var(--primary-color);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid #ddd; /* Borda apenas na thead */
+}
+
+.StyledListaUsers td {
+  padding: 12px 15px;
+  text-align: left;
+  font-size: var(--font-size-base);
+  color: var(--medium-gray);
+  border: none; /* Remover borda das células da tabela */
+}
+
+.StyledListaUsers tr:nth-child(even) {
+  background-color: #f7f7f7;
+}
+
+/* Estilos para telas grandes */
+@media (min-width: 768px) {
+  .search-form {
+    justify-content: flex-end;
+  }
+
+  .search-form input {
+    min-width: 220px;
+  }
+
+  .StyledListaUsers table {
+    width: 100%;
+  }
+}
+
+/* Estilos para telas pequenas */
+@media (max-width: 480px) {
+  .search-form {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .search-form input,
+  .search-form button {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .StyledListaUsers table {
+    width: 100%;
+    overflow-x: auto;
+    display: block;
+  }
+  
+  .StyledListaUsers th,
+  .StyledListaUsers td {
+    font-size: var(--font-size-small);
+    padding: 8px 10px;
+  }
+
+
+}
+
+/* Estilo para os ícones de editar e excluir */
+.icon {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+
+/* Estilos para o tooltip */
+.icon[title] {
+  position: relative;
+}
+
+.icon[title]:hover::after {
+  content: attr(title); /* O texto do tooltip */
+  position: absolute;
+  bottom: 100%; /* Coloca o tooltip acima do ícone */
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px 10px;
+  background-color: #333;
+  color: white;
+  font-size: 12px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+}
+
+.icon[title]:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.StyledBuscar {
+  font-size: 1rem;
+  font-family: var(--type-first);
+  cursor: pointer;
+  border: none;
+  border-radius: .4rem;
+  background-color: black;
+  color: #fff;
+  padding: .8rem 1.2rem;
+  box-sizing: border-box;
+  transition: all .1s;
+  min-width: 8rem;
+}
+
+.StyledBuscar:hover,
+.StyledBuscar:focus {
+  background-color: #fff;
+  color: black;
+  outline: none;
+  box-shadow: 0 0 0 3px black, 0 0 0 4px #fff;
+}
+
+.StyledBuscar:disabled {
+  opacity: .5;
+  cursor: wait;
+}
+
+.StyledBuscar a {
+  text-decoration: none;
+  color: black;
+ 
+}
+
+.botoes {
+  display: flex;
+  justify-content: space-between; /* Botões nas extremidades esquerda e direita */
+  align-items: center;
+  padding: 10px;
+  width: 100%; /* Garante que ocupe toda a largura do container */
+}
+
+.StyledAdd,
+.StyledExp {
+  font-size: 1rem;
+  font-family: var(--type-first);
+  cursor: pointer;
+  border: none;
+  border-radius: 0.4rem;
+  background-color: black;
+  color: #fff;
+  padding: 0.8rem 1.2rem;
+  box-sizing: border-box;
+  transition: all 0.1s;
+  min-width: 8rem;
+}

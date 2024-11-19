@@ -1,32 +1,41 @@
-const jwt = require('jsonwebtoken')
-const user = require('../controller/user')
+const jwt = require('jsonwebtoken');
+const user = require('../controller/user');
 
 function authMiddleware(roles = []) {
-    return (req, res, next) => {
-        const token = req.headers["authorization"]
+    return async (req, res, next) => {
+        const authHeader = req.headers["authorization"];
+        if (!authHeader) {
+            return res.status(401).json({ error: "Usuário não está logado" });
+        }
 
-        if(!token) {
-            return res.status(500).json("Usuário não esta logado")
+        const token = authHeader.split(' ')[1];
+        if (!token) {
+            return res.status(401).json({ error: "Token não fornecido" });
         }
 
         jwt.verify(token, 'MeuSegredo123!', async (err, decoded) => {
-            if(err) {
-                return res.status(500).json("Usuário não esta logado")
+            if (err) {
+                return res.status(401).json({ error: "Token inválido ou expirado" });
             }
 
-            const userLogged = await user.findUser(decoded.id)
-            if(!userLogged){
-                return res.status(500).json("USUÁRIO não encontrado")
-            }
-            if(roles.length && !roles.includes(userLogged.role)) {
-                return res.status(500).json("USUÁRIO SEM, PERMISSÃO")
-            }
+            try {
+                const userLogged = await user.findUser(decoded.id);
+                if (!userLogged) {
+                    return res.status(404).json({ error: "Usuário não encontrado" });
+                }
 
-            req.session = decoded
+                if (roles.length && !roles.includes(userLogged.role)) {
+                    return res.status(403).json({ error: "Usuário sem permissão" });
+                }
 
-            next()
-        })
+                req.user = userLogged;
+                req.session = decoded;
+                next();
+            } catch (error) {
+                return res.status(500).json({ error: "Erro interno do servidor" });
+            }
+        });
     }
 }
 
-module.exports = authMiddleware
+module.exports = authMiddleware;

@@ -4,16 +4,25 @@
   "description": "Aplicação rede social",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
     "test": "jest"
   },
   "author": "Eduardo Hansen",
   "license": "ISC",
   "dependencies": {
+    "@sendgrid/mail": "^8.1.4",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "env": "^0.0.2",
     "express": "^4.21.0",
+    "firebase": "^11.0.2",
+    "firebase-admin": "^12.7.0",
+    "firebase-functions": "^6.1.0",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.11.3",
+    "nodemailer": "^6.9.16",
     "sequelize": "^6.37.3"
   },
   "devDependencies": {
