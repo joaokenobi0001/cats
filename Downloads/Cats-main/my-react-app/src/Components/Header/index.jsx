@@ -20,9 +20,14 @@ function Header() {
             {data.user.name}
           </Link>
         ) : (
-          <Link className="login-header" to="/login">
-            Login
-          </Link>
+          <div className="auth-links">
+            <Link className="login-header" to="/login">
+              Login
+            </Link>
+            <Link className="register-header" to="/register">
+              Cadastro
+            </Link>
+          </div>
         )}
       </nav>
     </header>
@@ -30,3 +35,4 @@ function Header() {
 }
 
 export default Header;
+
