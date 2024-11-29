@@ -1,0 +1,70 @@
+/* style.css */
+.feed-photos-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.api-selector {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.api-selector button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.api-selector button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.api-selector button:hover {
+  background-color: #0056b3;
+  color: white;
+}
+
+.characters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.character-card {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.character-img {
+  width: 100%;
+  height: auto;
+  border-radius: 50%;
+}
+
+.feed-photos-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .api-selector button {
+    margin: 5px;
+    padding: 8px 15px;
+  }
+
+  .characters-grid,
+  .feed-photos-list {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+}

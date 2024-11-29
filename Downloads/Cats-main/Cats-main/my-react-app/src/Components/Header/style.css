@@ -1,0 +1,46 @@
+.StyledHeader {
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  width: 100%;
+  z-index: 100;
+  background: white;
+  top: 0;
+}
+
+.StyledHeader nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 4rem;
+}
+
+.StyledHeader .logo {
+  padding: .5rem 0;
+}
+
+.StyledHeader .login-header {
+  color: #333;
+}
+
+.StyledHeader .login-header::after {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 17px;
+  background: url('../../Assets/usuario.svg') no-repeat center center;
+  margin-left: .5rem;
+  position: relative;
+  top: -1px;
+}
+
+span{
+  color:pink;
+
+}
+
+.logo{
+  text-align: none;
+  text-decoration: none;
+  color:black;
+  font-family: "Roboto", sans-serif;
+}

@@ -1,0 +1,24 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Aplicação rede social",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Eduardo Hansen",
+  "license": "ISC",
+  "dependencies": {
+    "backend": "file:",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.11.3",
+    "sequelize": "^6.37.3"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  }
+}
