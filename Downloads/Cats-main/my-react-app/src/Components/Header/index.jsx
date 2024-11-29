@@ -24,7 +24,7 @@ function Header() {
             <Link className="login-header" to="/login">
               Login
             </Link>
-            <Link className="register-header" to="/register">
+            <Link className="register-header" to="/Cadastro">
               Cadastro
             </Link>
           </div>
