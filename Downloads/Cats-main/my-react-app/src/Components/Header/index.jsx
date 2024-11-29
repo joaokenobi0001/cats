@@ -5,7 +5,7 @@ import UserContext from '../../context/UserContext';
 import './style.css';
 
 function Header() {
-  const { data } = useContext(UserContext);
+  const { data, userLogout } = useContext(UserContext);  // Desestruturando userLogout para permitir o logout
 
   return (
     <header className="StyledHeader">
@@ -15,10 +15,16 @@ function Header() {
             <img src={CatsIcon} alt="Logo" className="logo-image" />
           </div>
         </Link>
+
         {data && data.user ? (
-          <Link className="login-header" to="/conta">
-            {data.user.name}
-          </Link>
+          <div className="user-links">
+            <Link className="profile-button" to="/conta">
+              Perfil
+            </Link>
+            <button className="logout-button" onClick={userLogout}>
+              Sair
+            </button>
+          </div>
         ) : (
           <div className="auth-links">
             <Link className="login-header" to="/login">
@@ -35,4 +41,3 @@ function Header() {
 }
 
 export default Header;
-

@@ -18,7 +18,8 @@ export const UserProvider = ({ children }) => {
     setError(null);
     setLogin(false);
     window.localStorage.removeItem('token');
-  }, []);
+    navigate('/login'); // Redireciona para login após o logout
+  }, [navigate]);
 
   // Função para obter os dados do usuário
   async function getUser(token) {
@@ -45,7 +46,7 @@ export const UserProvider = ({ children }) => {
       const { token } = await tokenRes.json();
       window.localStorage.setItem('token', token);
       await getUser(token);
-      navigate('/conta');
+      navigate('/conta'); // Navega para a página do perfil
     } catch (e) {
       setError(e.message);
       setLogin(false);
