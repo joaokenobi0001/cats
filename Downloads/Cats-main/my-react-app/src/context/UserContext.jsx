@@ -1,16 +1,18 @@
-import React, { createContext, useCallback, useEffect, useState } from 'react';
+import React, { createContext, useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginUser, tokenValidate, userGet } from '../api/user';
 
+// Criando o contexto
 export const UserContext = createContext();
 
-export const UserStorage = ({ children }) => {
+export const UserProvider = ({ children }) => {
   const [data, setData] = useState(null);
-  const [login, setLogin] = useState(null);
+  const [login, setLogin] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  // Função para fazer logout
   const userLogout = useCallback(() => {
     setData(null);
     setError(null);
@@ -18,6 +20,7 @@ export const UserStorage = ({ children }) => {
     window.localStorage.removeItem('token');
   }, []);
 
+  // Função para obter os dados do usuário
   async function getUser(token) {
     try {
       const { url, options } = await userGet(token);
@@ -31,6 +34,7 @@ export const UserStorage = ({ children }) => {
     }
   }
 
+  // Função para fazer login
   async function userLogin(email, password) {
     try {
       setError(null);
@@ -50,6 +54,7 @@ export const UserStorage = ({ children }) => {
     }
   }
 
+  // Efetua login automaticamente se o token estiver disponível
   useEffect(() => {
     async function autoLogin() {
       const token = window.localStorage.getItem('token');
