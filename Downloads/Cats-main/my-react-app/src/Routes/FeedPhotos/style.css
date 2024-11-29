@@ -1,0 +1,43 @@
+/* src/Components/style.css */
+
+.feed-photos-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto; /* Centraliza o contêiner na tela */
+}
+
+.feed-photos-list {
+  display: flex; /* Usar flexbox para garantir que cada item seja uma linha */
+  flex-direction: column; /* Cada item em uma nova linha */
+  justify-content: center;
+  align-items: center; /* Centraliza os itens na horizontal */
+}
+
+.StyledFeedPhotosItem {
+  display: flex;
+  flex-direction: column; /* Mantém o layout do item do feed */
+  border-radius: 0.5rem;
+  overflow: hidden;
+  cursor: pointer;
+  margin: 10px 0; /* Adiciona margem em cima e embaixo */
+  border: 1px solid #e0e0e0; /* Borda leve */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adiciona sombra */
+  transition: transform 0.2s; /* Animação ao passar o mouse */
+  background-color: #fff; /* Cor de fundo branca */
+  width: 100%; /* Cada card ocupará 100% da largura do contêiner */
+  max-width: 600px; /* Define uma largura máxima para os cards */
+  padding: 20px; /* Adiciona padding dentro do card */
+}
+
+.StyledFeedPhotosItem img {
+  width: 100%; /* Largura total do card */
+  height: 200px; /* Altura fixa */
+  object-fit: cover; /* Cobre a área definida sem distorcer a imagem */
+}
+
+.photo-info {
+  padding: 1rem; /* Adiciona um espaçamento confortável */
+  background-color: #f9f9f9; /* Fundo levemente cinza para contraste */
+}
+
+

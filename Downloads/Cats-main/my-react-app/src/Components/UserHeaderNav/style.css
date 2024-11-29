@@ -1,0 +1,105 @@
+/* Estilos para a visualização desktop */
+.StyledHeaderUserNav {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.StyledHeaderUserNav a,
+.StyledHeaderUserNav button {
+  background: #eee;
+  border-radius: .2rem;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  transition: .1s;
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
+}
+
+.StyledHeaderUserNav a:hover,
+.StyledHeaderUserNav a:focus,
+.StyledHeaderUserNav button:hover,
+.StyledHeaderUserNav button:focus {
+  background: white;
+  box-shadow: 0 0 0 3px #eee;
+  border-color: #333;
+  outline: none;
+}
+
+.StyledHeaderUserNav a.active {
+  background: white;
+  box-shadow: 0 0 0 3px #fea;
+  border-color: #fb1;
+}
+
+.StyledHeaderUserNav a.active svg > * {
+  fill: #fb1;
+}
+
+/* Adicionando ajuste para o botão de Logout */
+.StyledHeaderUserNav button.logout-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px; /* Tamanho adequado para o botão */
+  width: 40px;  /* Tamanho adequado para o botão */
+}
+
+.StyledHeaderUserNav button.logout-button img {
+  max-width: 20px;  /* Garantir que a imagem do ícone tenha um tamanho adequado */
+  max-height: 20px; /* Garantir que a imagem do ícone tenha um tamanho adequado */
+}
+
+/* Estilos para a visualização mobile */
+.StyledHeaderUserNav.mobile {
+  display: block;
+  position: absolute;
+  top: 70px;
+  right: 0;
+  padding: 0 1rem;
+  background: white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  border-radius: .2rem;
+  transform: translateX(-10px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.StyledHeaderUserNav.mobile a,
+.StyledHeaderUserNav.mobile button {
+  display: flex;
+  align-items: center;
+  background: none;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #eee;
+  padding: .5rem 0;
+  cursor: pointer;
+}
+
+.StyledHeaderUserNav.mobile a:hover svg > *,
+.StyledHeaderUserNav.mobile button:hover svg > * {
+  fill: #fb1;
+}
+
+.StyledHeaderUserNav.mobile button {
+  border-bottom: none;
+}
+
+.StyledHeaderUserNav.mobile svg {
+  margin-right: .5rem;
+}
+
+/* Estilo para o estado ativo do menu mobile */
+.StyledHeaderUserNav.mobile.active {
+  transform: initial;
+  opacity: 1;
+  z-index: 100;
+  visibility: visible;
+}
