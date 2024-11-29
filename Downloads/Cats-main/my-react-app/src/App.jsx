@@ -7,6 +7,7 @@ import './index.css';
 import Ajude from './Routes/AjudeOsAnimais';
 import Home from './Routes/Home';
 import Login from './Routes/Login';
+//import Cadastro from './Routes/Cadastro';//
 import NotFound from './Routes/NotFound';
 import ProtectedRoute from './Routes/ProtectedRoute';
 import User from './Routes/User';

@@ -26,9 +26,12 @@ function LoginCreate() {
       password: password.value,
     });
     const { response } = await request(url, options);
-    if (response.ok) userLogin(username.value, password.value);
+    if (response.ok) {
+      userLogin(username.value, password.value); // Loga automaticamente após cadastro
+    }
     console.log(response);
   }
+
   return (
     <section className="animeLeft">
       <Head title="Crie sua conta" />
@@ -36,9 +39,7 @@ function LoginCreate() {
 
       <form onSubmit={handleSubmit}>
         <Input label="Usuario" type="text" name="username" {...username} />
-
         <Input label="E-mail" type="email" name="email" {...email} />
-
         <Input label="Senha" type="password" name="password" {...password} />
 
         {loading ? (
@@ -47,7 +48,7 @@ function LoginCreate() {
           <Button content="Cadastrar" />
         )}
 
-        <ErrorMsg error={error}/>
+        <ErrorMsg error={error} />
       </form>
     </section>
   );
