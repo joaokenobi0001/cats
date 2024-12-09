@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import PropTypes from 'prop-types'; // Importa o PropTypes
 import { fetchCatImages } from '../../api/cats';
 import ErrorMsg from '../../Components/ErrorMsg';
 import FeedPhotosItemHome from '../../Components/FeedPhotosItemHome';
@@ -73,5 +74,10 @@ function FeedPhotos({ setModalPhoto }) {
     </div>
   );
 }
+
+// Validação de props usando PropTypes
+FeedPhotos.propTypes = {
+  setModalPhoto: PropTypes.func.isRequired, // Define que 'setModalPhoto' é uma função e é obrigatória
+};
 
 export default FeedPhotos;

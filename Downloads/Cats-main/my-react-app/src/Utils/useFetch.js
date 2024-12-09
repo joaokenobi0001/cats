@@ -3,51 +3,44 @@ import { useCallback, useState } from 'react';
 const useFetch = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(null); // Definindo o estado error
 
   const request = useCallback(async (url, options) => {
     let response = null;
     let json = null;
 
     try {
-      setError(null);
-      setLoading(true);
+      setError(null); // Limpando o erro antes de uma nova requisição
+      setLoading(true); // Iniciando o carregamento
 
-      // Fazendo a requisição
       response = await fetch(url, options);
 
-      // Tentando processar o corpo como JSON, se existir
-      if (response.status !== 204) { // Ignora o corpo para respostas 204 No Content
-        try {
+      const contentType = response.headers.get('Content-Type');
+      if (response.status !== 204) {
+        if (contentType && contentType.includes('application/json')) {
           json = await response.json();
-        } catch {
-          throw new Error('A resposta da API não pôde ser convertida para JSON.');
+        } else {
+          json = await response.text();
         }
       }
 
-      // Verifica o status HTTP
       if (!response.ok) {
         throw new Error(json?.message || 'Erro desconhecido na API.');
       }
 
-      setData(json); // Armazena os dados no estado, se necessário
+      setData(json); // Armazenando os dados no estado
     } catch (fetchError) {
       console.error('Erro durante a requisição:', fetchError);
-      setError(fetchError.message);
+      setError(fetchError.message || 'Erro desconhecido na requisição.'); // Definindo o erro
     } finally {
-      setLoading(false);
+      setLoading(false); // Finalizando o carregamento
     }
 
-    // Retorna a resposta e o JSON processado (ou `null` para respostas sem corpo)
     return { response, json };
   }, []);
 
-  return {
-    data,
-    loading,
-    error,
-    request,
-  };
+  return { data, loading, error, request }; // Retornando o estado do erro também
 };
 
 export default useFetch;
+

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as XLSX from 'xlsx';
 import { add_admin, add_view, bloq_users, delete_users, desbloq_users, edit_users } from '../../api/user';
 import ModelAdd from '../AddUser';

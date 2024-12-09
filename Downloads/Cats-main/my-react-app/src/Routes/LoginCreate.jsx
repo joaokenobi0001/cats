@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { registerUser } from '../api/user';
 import Button from '../Components/Button';
 import ErrorMsg from '../Components/ErrorMsg';

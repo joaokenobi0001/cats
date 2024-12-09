@@ -1,8 +1,8 @@
-import React, { createContext, useState, useCallback, useEffect } from 'react';
+import { createContext, useState, useCallback, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { loginUser, tokenValidate, userGet } from '../api/user';
+import PropTypes from 'prop-types';
+import { loginUser, tokenValidate, userGet } from '../api/user'; // Supondo que você tenha essas funções de API
 
-// Criando o contexto
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
@@ -22,42 +22,75 @@ export const UserProvider = ({ children }) => {
   }, [navigate]);
 
   // Função para obter os dados do usuário
-  async function getUser(token) {
+  const getUser = async (token) => {
     try {
       const { url, options } = await userGet(token);
       const response = await fetch(url, options);
-      if (!response.ok) throw new Error('Erro ao obter usuário.');
+
+      if (!response.ok) throw new Error('Erro ao obter dados do usuário.');
+
+      const contentType = response.headers.get('Content-Type');
+      // Verifica se a resposta é JSON
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('Resposta inválida: não é JSON.');
+      }
+
       const json = await response.json();
       setData(json);
       setLogin(true);
-    } catch (error) {
-      setError(error.message);
+    } catch (err) {
+      setError(err.message);
+      setLogin(false); // Caso haja erro, mantém o estado de login como false
     }
-  }
+  };
 
   // Função para fazer login
-  async function userLogin(email, password) {
+  const userLogin = async (email, password) => {
     try {
       setError(null);
       setLoading(true);
-      const { url, options } = await loginUser({ email, password });
-      const tokenRes = await fetch(url, options);
-      if (!tokenRes.ok) throw new Error('Erro: login inválido.');
-      const { token } = await tokenRes.json();
-      window.localStorage.setItem('token', token);
-      await getUser(token);
-      navigate('/conta'); // Navega para a página do perfil
-    } catch (e) {
-      setError(e.message);
-      setLogin(false);
+
+      const body = { email, password };
+      const { url, options } = loginUser(body);  // Obtendo URL e opções de login
+
+      const response = await fetch(url, options);
+
+      // Verificando o tipo de conteúdo
+      const contentType = response.headers.get('Content-Type');
+      console.log('Tipo de conteúdo da resposta:', contentType); // Adicionando log para verificar o tipo de resposta
+
+      if (!contentType || !contentType.includes('application/json')) {
+        const textResponse = await response.text(); // Pegando a resposta como texto para debugar
+        throw new Error(`Resposta inválida: não é JSON. Resposta: ${textResponse}`);
+      }
+
+      const data = await response.json();  // Obtendo resposta JSON
+
+      if (response.ok) {
+        console.log('Login bem-sucedido:', data);
+        const { token } = data;  // Supondo que a resposta contenha o token
+
+        // Armazenando o token
+        window.localStorage.setItem('token', token);
+
+        // Ação adicional
+        await getUser(token);
+        navigate('/conta');
+      } else {
+        throw new Error(data.message || 'Erro: login inválido');
+      }
+    } catch (err) {
+      console.error('Erro ao fazer login:', err.message);
+      setError(err.message);  // Exibindo erro
+      setLogin(false);  // Marcar login como false em caso de erro
     } finally {
-      setLoading(false);
+      setLoading(false);  // Finalizando o carregamento
     }
-  }
+  };
 
   // Efetua login automaticamente se o token estiver disponível
   useEffect(() => {
-    async function autoLogin() {
+    const autoLogin = async () => {
       const token = window.localStorage.getItem('token');
       if (token) {
         try {
@@ -65,17 +98,28 @@ export const UserProvider = ({ children }) => {
           setLoading(true);
           const { url, options } = tokenValidate(token);
           const response = await fetch(url, options);
+
+          // Verificando o tipo de conteúdo
+          const contentType = response.headers.get('Content-Type');
+          console.log('Tipo de conteúdo da resposta:', contentType); // Adicionando log para verificar o tipo de resposta
+
+          if (!contentType || !contentType.includes('application/json')) {
+            const textResponse = await response.text(); // Pegando a resposta como texto para debugar
+            throw new Error(`Resposta inválida: não é JSON. Resposta: ${textResponse}`);
+          }
+
           if (!response.ok) throw new Error('Token inválido!');
           await getUser(token);
-        } catch (e) {
-          userLogout();
+        } catch (err) {
+          console.error('Erro ao validar token:', err.message);
+          userLogout();  // Caso o token seja inválido, faz logout
         } finally {
           setLoading(false);
         }
       } else {
-        setLogin(false);
+        setLogin(false);  // Caso não haja token, mantém login como false
       }
-    }
+    };
     autoLogin();
   }, [userLogout]);
 
@@ -86,4 +130,12 @@ export const UserProvider = ({ children }) => {
   );
 };
 
+// Validação das propriedades
+UserProvider.propTypes = {
+  children: PropTypes.node.isRequired, // Validando que 'children' deve ser um node
+};
+
+export const useUser = () => useContext(UserContext);
 export default UserContext;
+
+

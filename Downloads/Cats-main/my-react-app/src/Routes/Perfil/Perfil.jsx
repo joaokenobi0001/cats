@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'; // Não é mais necessário importar 'React' explicitamente no React 17+
 import Button from '../Components/Button';
 import ErrorMsg from '../Components/ErrorMsg';
 
@@ -29,13 +29,14 @@ function Perfil() {
 
         if (!response.ok) {
           const errorData = await response.json();
-          setError(errorData.error || "Erro ao recuperar o perfil");
+          setError(errorData.error || 'Erro ao recuperar o perfil');
         } else {
           const data = await response.json();
           setUser(data.user);  // Armazena os dados do usuário na variável de estado
         }
-      } catch (error) {
-        setError("Erro ao conectar com o servidor");
+      } catch (err) {  // Captura o erro da requisição
+        console.error('Erro ao conectar com o servidor:', err);  // Agora estamos usando o 'err' para imprimir no console
+        setError('Erro ao conectar com o servidor');
       } finally {
         setLoading(false);
       }
@@ -47,6 +48,7 @@ function Perfil() {
   // Exibe a tela de carregamento ou erro se houver
   if (loading) return <div>Carregando...</div>;
 
+  // Se ocorrer um erro, exibe a mensagem de erro
   if (error) return <ErrorMsg error={error} />;
 
   // Exibe as informações do perfil do usuário

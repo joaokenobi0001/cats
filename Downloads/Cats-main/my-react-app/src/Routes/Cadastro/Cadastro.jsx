@@ -1,37 +1,59 @@
-import React, { useContext } from 'react';
-import { registerUser } from '../api/user';
-import Button from '../Components/Button';
-import ErrorMsg from '../Components/ErrorMsg';
-import Head from '../Components/Head';
-import Input from '../Components/Input';
-import Title from '../Components/Title';
-import UserContext from '../context/UserContext';
-import useFetch from '../Utils/useFetch';
-import useForm from '../Utils/useForm';
+import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom'; // Importando useNavigate para redirecionamento
+import Button from '../../Components/Button'; 
+import ErrorMsg from '../../Components/ErrorMsg'; 
+import Head from '../../Components/Head'; 
+import Input from '../../Components/Input'; 
+import Title from '../../Components/Title'; 
+import { UserContext } from '../../context/UserContext'; 
+import useFetch from '../../Utils/useFetch'; 
+import useForm from '../../Utils/useForm'; 
+import { registerUser } from '../../api/user'; 
 
-// Componente LoginCreate que é usado para o fluxo de cadastro de usuários
-function LoginCreate() {
-  const username = useForm();
-  const password = useForm('password');
+const Cadastro = () => {
+  // Hooks personalizados para controlar o valor dos campos
+  const name = useForm(); 
   const email = useForm('email');
+  const password = useForm('password');
+  
+  const { userLogin, error, loading } = useContext(UserContext); // Contexto para gerenciar login
+  const { request } = useFetch(); // Hook para requisições
+  const navigate = useNavigate(); // Hook para redirecionamento
 
-  const { userLogin } = useContext(UserContext);
-
-  const { loading, error, request } = useFetch();
-
-  async function handleSubmit(event) {
+  // Função chamada ao submeter o formulário
+  const handleSubmit = async (event) => {
     event.preventDefault();
+
+    // Valida campos antes de submeter
+    if (!name.validate() || !email.validate() || !password.validate()) {
+      console.error('Preencha todos os campos corretamente.');
+      return;
+    }
+
+    // Certifique-se de que o corpo da requisição está correto
     const { url, options } = registerUser({
-      username: username.value,
+      name: name.value,  
       email: email.value,
       password: password.value,
     });
-    const { response } = await request(url, options);
-    if (response.ok) {
-      userLogin(username.value, password.value); // Loga automaticamente após cadastro
+
+    try {
+      const { response } = await request(url, options);
+      if (response.ok) {
+        // Faz login automaticamente após cadastro
+        await userLogin(name.value, email.value, password.value);  
+
+        // Redireciona para a página de perfil após o login
+        navigate('/user');  // Redireciona para a página de perfil, onde exibe os dados do usuário
+      } else {
+        // Lida com o erro de resposta do servidor
+        const errorMessage = await response.json();
+        console.error('Erro ao cadastrar:', errorMessage.message || response.statusText);
+      }
+    } catch (error) {
+      console.error('Erro na requisição:', error);
     }
-    console.log(response);
-  }
+  };
 
   return (
     <section className="animeLeft">
@@ -39,38 +61,23 @@ function LoginCreate() {
       <Title type="h1">Cadastre-se</Title>
 
       <form onSubmit={handleSubmit}>
-        <Input label="Usuario" type="text" name="username" {...username} />
+        {/* Campos do formulário */}
+        <Input label="Nome" type="text" name="name" {...name} />  
         <Input label="E-mail" type="email" name="email" {...email} />
-        <Input label="Senha" type="password" name="password" {...password} />
+        <Input label="Senha" type="password" name="password" {...password} /> 
 
+        {/* Botão de submit */}
         {loading ? (
           <Button content="Carregando..." disabled />
         ) : (
           <Button content="Cadastrar" />
         )}
 
+        {/* Exibição de erro, se houver */}
         <ErrorMsg error={error} />
       </form>
     </section>
   );
-}
-
-function Cadastro() {
-  return (
-    <div className="container">
-      <header className="header">
-        <h1>Bem-vindo ao Cadastro</h1>
-      </header>
-      <main>
-        {/* Chama o componente LoginCreate para exibir o formulário de cadastro */}
-        <LoginCreate />
-      </main>
-      <footer className="footer">
-        <p>© 2024 Cats.</p>
-      </footer>
-    </div>
-  );
-}
+};
 
 export default Cadastro;
-

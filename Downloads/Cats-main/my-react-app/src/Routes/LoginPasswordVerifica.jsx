@@ -1,28 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { verificar_code } from '../api/user';
-import Button from '../Components/Button';
-import ErrorMsg from '../Components/ErrorMsg';
-import Head from '../Components/Head';
-import Input from '../Components/Input';
-import Title from '../Components/Title';
-import useFetch from '../Utils/useFetch';
+import { useEffect, useState } from 'react'; 
+import { useNavigate } from 'react-router-dom'; 
+import { verifyRecoveryCode } from '../api/user'; // Certifique-se de que a função está exportada corretamente
+import Button from '../Components/Button'; 
+import ErrorMsg from '../Components/ErrorMsg'; 
+import Head from '../Components/Head'; 
+import Input from '../Components/Input'; 
+import Title from '../Components/Title'; 
+import useFetch from '../Utils/useFetch'; 
 import useForm from '../Utils/useForm';
 
-function LoginPasswordVerifica() {
-  const code = useForm();
-  const { loading, error, request } = useFetch();
-  const [message, setMessage] = useState('');
-  const navigate = useNavigate();
+function LoginPasswordVerifica() { 
+  const code = useForm(); 
+  const { loading, error, request } = useFetch(); 
+  const [message, setMessage] = useState(''); 
+  const navigate = useNavigate(); 
   const [email, setEmail] = useState('');
 
   // Obter o email da URL
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    setEmail(params.get('email') || '');
+  useEffect(() => { 
+    const params = new URLSearchParams(window.location.search); 
+    setEmail(params.get('email') || ''); 
   }, []);
 
-  const handleCodeSubmit = async (event) => {
+  const handleCodeSubmit = async (event) => { 
     event.preventDefault();
 
     // Verificar se os campos estão preenchidos
@@ -31,7 +31,7 @@ function LoginPasswordVerifica() {
       return;
     }
 
-    const { url, options } = verificar_code({
+    const { url, options } = verifyRecoveryCode({
       email,
       codigoAcesso: code.value, // Certifique-se de usar "codigoAcesso" para corresponder ao backend
     });

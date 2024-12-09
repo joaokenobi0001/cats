@@ -1,59 +1,47 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Button from '../Components/Button';
-import ErrorMsg from '../Components/ErrorMsg';
-import Head from '../Components/Head';
-import Input from '../Components/Input';
-import Title from '../Components/Title';
-import useFetch from '../Utils/useFetch';
-import useForm from '../Utils/useForm';
-import { atualizar_senha } from '../api/user';
+import { useEffect, useState } from 'react'; 
+import { useNavigate } from 'react-router-dom'; 
+import Button from '../Components/Button'; 
+import ErrorMsg from '../Components/ErrorMsg'; 
+import Head from '../Components/Head'; 
+import Input from '../Components/Input'; 
+import Title from '../Components/Title'; 
+import useFetch from '../Utils/useFetch'; 
+import useForm from '../Utils/useForm'; 
+import { atualizar_senha } from '../api/user'; // Correção do nome da função
 
-function LoginPasswordReset() {
-  const [login, setLogin] = useState('');
-  const [key, setKey] = useState('');
-  const password = useForm('password');
-  const { error, loading, request } = useFetch();
+function LoginPasswordReset() { 
+  const [login, setLogin] = useState(''); 
+  const [key, setKey] = useState(''); 
+  const password = useForm('password'); 
+  const { error, loading, request } = useFetch(); 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    setKey(params.get('key') || '');
-    setLogin(params.get('login') || '');
+  useEffect(() => { 
+    const params = new URLSearchParams(window.location.search); 
+    setKey(params.get('key') || ''); 
+    setLogin(params.get('login') || ''); 
   }, []);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event) => { 
     event.preventDefault();
-  
-    if (password.validate()) {
-      const { url, options } = atualizar_senha({
-        login,
-        key,
-        password: password.value,
+
+    if (password.validate()) { 
+      const { url, options } = atualizar_senha({ 
+        login, 
+        key, 
+        password: password.value, 
       });
-  
-      try {
-        const { response, json } = await request(url, options); // Use o retorno do hook
-  
-        if (response.ok) {
-          if (json?.success) {
-            alert(json.message || 'Senha redefinida com sucesso!');
-            navigate('/login'); // Redireciona para a página de login
-          } else {
-            alert('Erro inesperado ao redefinir a senha.');
-          }
-        } else {
-          alert(json?.error || 'Erro ao redefinir a senha.');
+
+      try { 
+        const { response } = await request(url, options); 
+        if (response.ok) { 
+          navigate('/login'); // Redireciona para login 
         }
-      } catch (err) {
-        console.error('Erro ao redefinir a senha:', err);
-        alert('Erro na conexão com o servidor.');
+      } catch { 
+        console.error('Erro ao redefinir a senha.'); 
       }
     }
   };
-  
-  
-  
 
   return (
     <section className="animeLeft">

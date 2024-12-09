@@ -1,45 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { fetchCatImageById } from '../../api/api'; // Importa a função para buscar imagem por ID
-import ErrorMsg from '../ErrorMsg';
-import Loading from '../Loading';
-import PhotoContent from '../PhotoContent';
-import './style.css';
+import { useState } from 'react';
+import FeedPhotos from '../FeedPhotosHome';
+import FeedModal from "../Routes/FeedModal";  // Caminho corrigido
 
-function FeedModal({ photo, setModalPhoto }) {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
+function FeedHome() {
+  const [page, setPage] = useState(1);
+  const [modalPhoto, setModalPhoto] = useState(null);
 
-  useEffect(() => {
-    async function loadPhoto() {
-      setLoading(true);
-      try {
-        const photoData = await fetchCatImageById(photo.id);
-        setData(photoData);
-        setError(null);
-      } catch (err) {
-        setError('Erro ao carregar a imagem.');
-      } finally {
-        setLoading(false);
-      }
+  function handleInfiniteScroll(isInfinite) {
+    if (isInfinite) {
+      setPage((prevPage) => prevPage + 10);
     }
-
-    if (photo) {
-      loadPhoto();
-    }
-  }, [photo]);
-
-  function handleOutsideClick(event) {
-    if (event.target === event.currentTarget) setModalPhoto(null);
   }
 
   return (
-    <div className="StyledFeedModal" onClick={handleOutsideClick}>
-      {error && <ErrorMsg error={error} />}
-      {loading && <Loading />}
-      {data && <PhotoContent data={data} />}
+    <div>
+      <FeedPhotos
+        page={page}
+        setModalPhoto={setModalPhoto}
+        setInfinite={handleInfiniteScroll}
+      />
+      {modalPhoto && <FeedModal photo={modalPhoto} setModalPhoto={setModalPhoto} />}
     </div>
   );
 }
 
-export default FeedModal;
+export default FeedHome;

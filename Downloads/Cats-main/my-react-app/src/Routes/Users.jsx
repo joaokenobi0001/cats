@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { get_users } from '../api/user';
 import ErrorMsg from '../Components/ErrorMsg';
 import ListaUsers from '../Components/ListaUsers';
@@ -15,10 +15,7 @@ function UserStats() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
+  // Função para buscar dados
   const fetchData = async () => {
     const token = window.localStorage.getItem('token');
     if (!token) {
@@ -48,6 +45,11 @@ function UserStats() {
     }
   };
 
+  // Chama a função fetchData quando o componente for montado ou filtros mudarem
+  useEffect(() => {
+    fetchData();
+  }, [firstName, lastName, email]);  // Incluindo os estados de filtro como dependências
+
   const handleSearch = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -59,6 +61,29 @@ function UserStats() {
 
   return (
     <section className="StyledListaUsers">
+      {/* Adicionando campos de filtro para firstName, lastName, e email */}
+      <form onSubmit={handleSearch}>
+        <input 
+          type="text" 
+          placeholder="Primeiro Nome" 
+          value={firstName} 
+          onChange={(e) => setFirstName(e.target.value)} 
+        />
+        <input 
+          type="text" 
+          placeholder="Último Nome" 
+          value={lastName} 
+          onChange={(e) => setLastName(e.target.value)} 
+        />
+        <input 
+          type="email" 
+          placeholder="E-mail" 
+          value={email} 
+          onChange={(e) => setEmail(e.target.value)} 
+        />
+        <button type="submit">Buscar</button>
+      </form>
+
       {data && data.user && data.user.length > 0 ? (
         <ListaUsers data={data.user} />
       ) : (

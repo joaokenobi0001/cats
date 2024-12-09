@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import UserContext from '../context/UserContext'; // Importa corretamente o UserContext
+import { UserContext } from '../context/UserContext';
+
 
 import LoginForm from './LoginForm';
 import LoginPasswordLost from './LoginPasswordLost';

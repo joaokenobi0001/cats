@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import  { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import UserContext from '../../context/UserContext';
 import Title from '../Title';
