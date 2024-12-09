@@ -1,10 +1,11 @@
 const User = require("../model/user");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const salts = 12;
 const sgMail = require('@sendgrid/mail');
-const AccessCode = require("../model/acessCode"); 
+const AccessCode = require("../model/acessCode");
 require('dotenv').config();
+
+const salts = 12;
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 class UserController {
@@ -26,45 +27,48 @@ class UserController {
 
     async initializeAdmin() {
         try {
-          console.log('Verificando usuário admin...');
-          const adminEmail = process.env.ADMIN_EMAIL;
-          const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
-          const adminUser = await User.create({
-            name: process.env.ADMIN_NAME,
-            email: adminEmail,
-            password: hashedPassword,
-            role: process.env.ADMIN_ROLE,
-          });
-      
-          console.log('Usuário admin criado com sucesso:', adminUser.email);
+            console.log('Verificando usuário admin...');
+            const adminEmail = process.env.ADMIN_EMAIL;
+
+            const adminExists = await User.findOne({ where: { email: adminEmail } });
+            if (adminExists) {
+                console.log('Admin já existe:', adminEmail);
+                return;
+            }
+
+            const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, salts);
+            const adminUser = await User.create({
+                name: process.env.ADMIN_NAME,
+                email: adminEmail,
+                password: hashedPassword,
+                role: process.env.ADMIN_ROLE,
+            });
+
+            console.log('Usuário admin criado com sucesso:', adminUser.email);
         } catch (error) {
-          console.error('Erro ao criar usuário admin:', error.message);
+            console.error('Erro ao criar usuário admin:', error.message);
         }
-      }
-    
+    }
+
     async findUser(id, isDelete = false) {
-        if (id === undefined) {
+        if (!id) {
             throw new Error("Id é obrigatório.");
         }
-    
+
         const userValue = await User.findByPk(id);
         if (!userValue) {
             throw new Error("Usuário não encontrado.");
         }
-    
-        if (!isDelete  && userValue.isBlocked) {
+
+        if (!isDelete && userValue.isBlocked) {
             throw new Error("Usuário bloqueado.");
         }
-    
+
         return userValue;
     }
-    
-    async update(id) {
-        await User.findByPk(id);
-    }
-    
+
     async delete(id) {
-        if (id === undefined) {
+        if (!id) {
             throw new Error("Id é obrigatório.");
         }
 
@@ -74,49 +78,19 @@ class UserController {
     }
 
     async findAll() {
-            try {
-                const users = await User.findAll({
-                    attributes: { exclude: ['password'] }
-                });
-                return users;
-            } catch (e) {
-                console.error('Erro ao buscar usuários:', e);
-                throw new Error('Erro ao buscar usuários');
-            }
+        try {
+            const users = await User.findAll({
+                attributes: { exclude: ['password'] }
+            });
+            return users;
+        } catch (e) {
+            console.error('Erro ao buscar usuários:', e);
+            throw new Error('Erro ao buscar usuários');
         }
-
-        async findUm(email) {
-            try {
-              const user = await User.findOne({
-                where: { email },
-                attributes: ['id'], // Apenas retorna o ID do usuário
-              });
-        
-              if (!user) {
-                throw new Error('Usuário não encontrado');
-              }
-        
-              return user.id; // Retorna apenas o ID
-            } catch (error) {
-              console.error('Erro ao buscar ID do usuário:', error);
-              throw new Error('Erro ao buscar usuário');
-            }
-          }
-        
-          async updateSenha(userId, hashedPassword) {
-            try {
-              await User.update({ password: hashedPassword }, { where: { id: userId } });
-              console.log(`Senha atualizada para o usuário com ID: ${userId}`);
-            } catch (error) {
-              console.error('Erro ao atualizar senha no banco de dados:', error);
-              throw new Error('Erro ao atualizar senha');
-            }
-          }
-          
-        
+    }
 
     async login(email, password) {
-        if (email === undefined || password === undefined) {
+        if (!email || !password) {
             throw new Error("Email e senha são obrigatórios.");
         }
 
@@ -126,52 +100,33 @@ class UserController {
             throw new Error("Email ou senha inválido. Tente novamente.");
         }
 
+        if (userLogged.isBlocked) {
+            throw new Error("Sua conta está bloqueada. Entre em contato com o suporte.");
+        }
+
         const validPassword = await bcrypt.compare(password, userLogged.password);
-        if (!validPassword || userLogged.isBlocked) {
+        if (!validPassword) {
             throw new Error("Email ou senha inválido. Tente novamente.");
         }
 
         return jwt.sign(
             { id: userLogged.id, email: userLogged.email, role: userLogged.role },
-            'MeuSegredo123!', { expiresIn: 60 * 60 }
+            process.env.JWT_SECRET,
+            { expiresIn: 60 * 60 } // 1 hora
         );
     }
 
-    async blockUser(id) {
-        const user = await this.findUser(id);
-        user.isBlocked = true;
-        await user.save();
-    }
-
-    async unblockUser(id) {
-
-        const user = await User.findByPk(id);
-        if (!user) {
-            throw new Error("Usuário não encontrado.");
-        }
-
-        user.isBlocked = false;
-        await user.save();
-    }
-
-    
-    async recuperarSenha(email) {
-        const user = await User.findOne({ where: { email } });
-        if (!user) throw new Error('Email inválido.');
-        return { user };
-    }
-
     async sendAccessCode(email, codigoAcesso) {
-        if (!email) throw new Error('O email é obrigatório.');
-    
+        if (!email || !codigoAcesso) throw new Error('Email e código são obrigatórios.');
+
         const msg = {
-            to: email, // E-mail do destinatário
-            from: 'eduardohansen10@gmail.com', // Use um e-mail válido (melhor, do domínio autorizado no SendGrid)
+            to: email,
+            from: process.env.SENDGRID_SENDER,
             subject: 'Seu Código de Acesso',
             text: `Seu código de acesso é: ${codigoAcesso}`,
             html: `<strong>Seu código de acesso é: ${codigoAcesso}</strong>`,
         };
-    
+
         try {
             await sgMail.send(msg);
             console.log(`E-mail enviado para: ${email}`);
@@ -183,7 +138,7 @@ class UserController {
 
     async storeAccessCode(userId, codigoAcesso) {
         const expiration = new Date();
-        expiration.setMinutes(expiration.getMinutes() + 10); // Código válido por 10 minutos
+        expiration.setMinutes(expiration.getMinutes() + 10);
 
         await AccessCode.create({
             userId,
@@ -193,13 +148,20 @@ class UserController {
     }
 
     async validateAccessCode(userId, codigoAcesso) {
-            const accessCode = await AccessCode.findOne({ where: { userId, codigoAcesso } });
-            if (!accessCode) throw new Error('Código inválido.');
-
-            if (new Date() > accessCode.expiresAt) throw new Error('Código expirado.');
-
-            return accessCode;
+        const accessCode = await AccessCode.findOne({ where: { userId, codigoAcesso } });
+        if (!accessCode) {
+            console.error(`Código inválido para userId: ${userId}`);
+            throw new Error('Código inválido.');
         }
+
+        if (new Date() > accessCode.expiresAt) {
+            console.error(`Código expirado para userId: ${userId}`);
+            throw new Error('Código expirado.');
+        }
+
+        console.log(`Código válido para userId: ${userId}`);
+        return accessCode;
     }
+}
 
 module.exports = new UserController();

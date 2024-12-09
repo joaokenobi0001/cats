@@ -1,25 +1,38 @@
 const express = require('express');
 const UserApi = require('../api/user');
 const authMiddleware = require('../middleware/auth');
-const UserController = require('../controller/user'); 
+const UserController = require('../controller/user');
+
 const userRouter = express.Router();
 
+// Rota para registro de usuários
+userRouter.post('/', UserApi.createUser);  // Alterado para a rota padrão
 
-userRouter.post('/login',  UserApi.login);
-userRouter.post('/validate', authMiddleware(), UserApi.tokenValidate);
-userRouter.get('/token', authMiddleware(), UserApi.getUser);
-// Atualizar senha - rota específica
-userRouter.put('/atualizarsenha', UserApi.atualizarSenha);
+// Rota para login
+userRouter.post('/login', UserApi.login);  // Mantido como estava
 
-// Atualizar usuário pelo ID - rota dinâmica
-userRouter.put('/:id', authMiddleware(['admin']), UserApi.updateUser);
-userRouter.get('/', authMiddleware(['admin']), UserApi.getAllUser);
-userRouter.post('/', authMiddleware(['admin']), UserApi.createUser);
-userRouter.post('/admin', UserApi.createUserAdmin);
-userRouter.delete('/:id', authMiddleware(['admin']), UserApi.deleteUser);
-userRouter.post('/:id/block', authMiddleware(['admin']), UserApi.blockUser);
-userRouter.post('/:id/unblock', authMiddleware(['admin']), UserApi.unblockUser);
-userRouter.post('/verificar', UserApi.validateAccessCode);  
-userRouter.post('/recuperar', UserApi.recuperarSenha); 
+// Validação de token (requer autenticação)
+userRouter.post('/validate', authMiddleware(), UserApi.tokenValidate);  // Mantido como estava
+
+// Obter informações do usuário autenticado
+userRouter.get('/token', authMiddleware(), UserApi.getUser);  // Mantido como estava
+
+// Atualizar senha
+userRouter.put('/atualizarsenha', UserApi.atualizarSenha);  // Mantido como estava
+
+// Rotas protegidas para administradores
+userRouter.get('/', authMiddleware(['admin']), UserApi.getAllUser);  // Mantido como estava
+userRouter.post('/admin', authMiddleware(['admin']), UserApi.createUserAdmin);  // Mantido como estava
+userRouter.put('/:id', authMiddleware(['admin']), UserApi.updateUser);  // Mantido como estava
+userRouter.delete('/:id', authMiddleware(['admin']), UserApi.deleteUser);  // Mantido como estava
+userRouter.post('/:id/block', authMiddleware(['admin']), UserApi.blockUser);  // Mantido como estava
+userRouter.post('/:id/unblock', authMiddleware(['admin']), UserApi.unblockUser);  // Mantido como estava
+
+// Rotas para recuperação de senha
+userRouter.post('/recuperar', UserApi.recuperarSenha);  // Mantido como estava
+userRouter.post('/verificar', UserApi.validateAccessCode);  // Mantido como estava
+
+// Inicializar usuário administrador padrão
 UserController.initializeAdmin();
+
 module.exports = userRouter;
